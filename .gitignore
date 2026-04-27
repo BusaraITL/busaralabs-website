@@ -1,0 +1,406 @@
+# ============================================================
+# BUSARA INFRASTRUCTURE & TECHNOLOGY LABS LTD
+# Repository: busaralabs-website
+# File:       .gitignore
+# Purpose:    Hardened exclusion rules for production repository
+# Version:    2.0
+# Date:       April 2026
+# Maintainer: compliance@busaralabs.com
+# Standard:   Three-gate (ODPC | Security | Engineering)
+# ============================================================
+# PRINCIPLE
+# .gitignore prevents NEW commits of matched files. It does NOT
+# remove files already in Git history. If a secret is suspected
+# to have been committed, treat it as compromised and rotate it
+# immediately. Pre-commit secret scanning (gitleaks) is the
+# primary control. This file is the second layer.
+# ============================================================
+
+
+# ------------------------------------------------------------
+# 1. SECRETS — NEVER COMMIT
+# ------------------------------------------------------------
+# Any file matching these patterns is treated as containing
+# credentials. If gitleaks fires on any of these, rotate the
+# secret before doing anything else.
+
+# Environment variable files (Wrangler local, dotenv, generic)
+.env
+.env.*
+!.env.example
+!.env.template
+.dev.vars
+.dev.vars.*
+*.envrc
+
+# Cloud provider credentials accidentally copied into repo
+.aws/
+aws.config
+aws-credentials*
+gcp-key*.json
+gcp-credentials*.json
+service-account*.json
+azure.config
+*-credentials.json
+*-credentials.yaml
+*-secrets.json
+*-secrets.yaml
+
+# HashiCorp Vault — agent tokens, unseal keys, recovery keys
+.vault-token
+vault.hcl.local
+*.vault.json
+unseal-keys*
+recovery-keys*
+
+# TLS / cryptographic material — certificates and private keys
+*.pem
+*.key
+*.crt
+*.cer
+*.cert
+*.p7b
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.truststore
+*.pkcs12
+
+# SSH keys (in case someone copies one into the repo)
+id_rsa
+id_rsa.*
+id_ed25519
+id_ed25519.*
+id_ecdsa
+id_ecdsa.*
+*.ppk
+known_hosts
+
+# GPG / signing material
+*.gpg
+*.asc
+secring.*
+
+# HSM / PKCS#11 artifacts
+*.hsm
+*.pkcs11
+softhsm/
+softhsm2.conf
+
+# API tokens / session files
+.npmrc.local
+.yarnrc.local
+.cargo-credentials
+.docker/config.json
+
+
+# ------------------------------------------------------------
+# 2. CLOUDFLARE LOCAL STATE
+# ------------------------------------------------------------
+# Wrangler caches authenticated sessions, local D1 databases,
+# KV simulations, and Workers logs in these directories.
+
+.wrangler/
+.miniflare/
+.mf/
+wrangler.toml.local
+wrangler.*.local.toml
+worker-configuration.d.ts
+.dev.vars.example
+!.dev.vars.template
+
+
+# ------------------------------------------------------------
+# 3. DATABASES & DUMPS
+# ------------------------------------------------------------
+# Local D1 SQLite files, test fixtures, backups. These can
+# contain personal data even from local testing.
+
+*.db
+*.sqlite
+*.sqlite3
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+*.sql.gz
+*.dump
+*.bak.sql
+db-backup-*
+local-d1-*.db
+fixtures/real-*
+fixtures/prod-*
+
+
+# ------------------------------------------------------------
+# 4. NODE.JS / NPM
+# ------------------------------------------------------------
+
+node_modules/
+.npm/
+.pnp.*
+.yarn/cache/
+.yarn/install-state.gz
+package-lock.json.bak
+
+
+# ------------------------------------------------------------
+# 5. BUILD OUTPUTS
+# ------------------------------------------------------------
+# Generated artifacts. Never source-of-truth. Build outputs
+# can also embed environment variables — never commit them.
+
+dist/
+build/
+out/
+.cache/
+.parcel-cache/
+.next/
+.nuxt/
+.output/
+public/build/
+assets/js/*.bundle.js
+assets/js/*.bundle.js.map
+assets/js/*.min.js
+assets/css/*.min.css
+assets/css/*.min.css.map
+*.tsbuildinfo
+
+
+# ------------------------------------------------------------
+# 6. INFRASTRUCTURE-AS-CODE STATE (FUTURE-PROOFING)
+# ------------------------------------------------------------
+# Not currently in the stack but reserved — Terraform/Pulumi
+# state files contain plaintext secrets and infra topology.
+
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+.terraform/
+.terraformrc
+terraform.rc
+.pulumi/
+pulumi.*.yaml
+!pulumi.yaml
+
+
+# ------------------------------------------------------------
+# 7. CONTAINERS & ORCHESTRATION
+# ------------------------------------------------------------
+
+.docker/
+docker-compose.override.yml
+docker-compose.local.yml
+*.kubeconfig
+kubeconfig
+.helm/
+charts/*.tgz
+
+
+# ------------------------------------------------------------
+# 8. SECURITY SCAN OUTPUTS
+# ------------------------------------------------------------
+# Findings from gitleaks, trufflehog, npm audit, etc. These
+# files describe live vulnerabilities — keep them out of repo.
+
+gitleaks-report.*
+trufflehog-report.*
+*.sarif
+npm-audit.json
+snyk-report.*
+.scannerwork/
+
+
+# ------------------------------------------------------------
+# 9. AI AGENT ARTIFACTS — NEVER COMMIT
+# ------------------------------------------------------------
+# Per BIT Labs Core AI Agent Foundation Ruleset v2.0,
+# decision logs, signatures, and merkle proofs are immutable
+# and live in S3 Object Lock. They must never enter Git.
+
+agent-decisions/
+agent-logs/
+merkle-roots/
+*.decision.json
+*.signature
+*.merkle-proof
+
+
+# ------------------------------------------------------------
+# 10. INSTITUTIONAL DRAFTS — RESTRICTED
+# ------------------------------------------------------------
+# Negotiation drafts, internal legal commentary, and breach
+# notes are NOT versioned in the public repo. They live in
+# the secure document store with access controls.
+
+drafts/internal/
+drafts/legal-commentary/
+drafts/dpa-negotiation/
+drafts/breach-*
+drafts/odpc-internal/
+*.internal.md
+*.internal.docx
+*.confidential.*
+
+
+# ------------------------------------------------------------
+# 11. LOGS & DIAGNOSTICS
+# ------------------------------------------------------------
+# Logs may contain PII per ODPC Section 49. Any log that may
+# touch personal data is excluded by default.
+
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+wrangler-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Process diagnostics
+heapdump-*
+*.heapsnapshot
+core
+core.*
+*.core
+crash-*.log
+
+
+# ------------------------------------------------------------
+# 12. EDITOR & IDE ARTIFACTS
+# ------------------------------------------------------------
+
+# VS Code — keep extensions/launch templates if shared, ignore personal
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json.example
+!.vscode/launch.json.example
+
+# JetBrains
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Sublime
+*.sublime-project
+*.sublime-workspace
+
+# Vim / Emacs
+*.swp
+*.swo
+*.swn
+*~
+.#*
+\#*\#
+.netrwhist
+
+# Cursor / Claude Code (AI coding tools — may cache context)
+.cursor/
+.claude/
+.aider*
+
+
+# ------------------------------------------------------------
+# 13. OPERATING SYSTEM ARTIFACTS
+# ------------------------------------------------------------
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Linux
+.Trash-*
+.directory
+.fuse_hidden*
+
+
+# ------------------------------------------------------------
+# 14. PYTHON ARTIFACTS
+# ------------------------------------------------------------
+# Skills tooling and scripts may use Python. Virtualenvs and
+# bytecode must never enter the repo.
+
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+
+# ------------------------------------------------------------
+# 15. TEST & COVERAGE ARTIFACTS
+# ------------------------------------------------------------
+
+coverage/
+.nyc_output/
+.coverage
+.coverage.*
+htmlcov/
+test-results/
+playwright-report/
+playwright/.cache/
+.lighthouseci/
+
+
+# ------------------------------------------------------------
+# 16. TEMPORARY & MISC
+# ------------------------------------------------------------
+
+tmp/
+temp/
+.tmp/
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+*~
+
+# Archives accidentally placed in repo
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.rar
+*.7z
+
+# Lock files for tools we do not use (prevents committing wrong one)
+yarn.lock
+pnpm-lock.yaml
+bun.lockb
+
+
+# ============================================================
+# END OF .gitignore
+# ============================================================
+# REMINDER:
+# .gitignore is NOT a security control. It is a hygiene control.
+# Real protection requires:
+#   1. Pre-commit secret scanning (gitleaks)
+#   2. CI/CD secret scanning (GitHub Actions)
+#   3. Branch protection rules on main
+#   4. Immediate rotation if any secret is suspected exposed
+# See: BIT Labs Core AI Agent Foundation Ruleset v2.0
+# ============================================================

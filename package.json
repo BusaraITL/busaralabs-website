@@ -1,0 +1,23 @@
+{
+  "name": "busaralabs-website",
+  "version": "1.0.0",
+  "description": "BusaraLabs.com — Corporate website for Busara Infrastructure & Technology Labs Ltd",
+  "private": true,
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "scripts": {
+    "build": "node build.js",
+    "dev": "wrangler pages dev . --port 3000",
+    "deploy": "npm run build && wrangler pages deploy .",
+    "lint:css": "stylelint 'assets/css/**/*.css'",
+    "lint:js": "eslint 'assets/js/**/*.js'",
+    "lint": "npm run lint:css && npm run lint:js"
+  },
+  "devDependencies": {
+    "esbuild": "^0.20.0",
+    "wrangler": "^3.45.0"
+  },
+  "license": "UNLICENSED"
+}
