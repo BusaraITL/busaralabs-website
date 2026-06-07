@@ -1,20 +1,25 @@
 # ============================================================
 # BUSARA INFRASTRUCTURE & TECHNOLOGY LABS
 # GitHub Actions CI/CD Pipeline — busaralabs.com
-# Version: 1.0 | June 2026
+# Version: 2.0 | June 2026
 # Ref: BUSARALABS-WEBSITE-COMPLETE-SPEC.md § 9.1
 # Governs: Validate → Staging → Production (manual gate)
 # ============================================================
 #
 # BRANCH STRATEGY:
-#   feature/*  → validate + preview deploy only
+#   feature/*  → validate only
 #   staging    → validate + deploy to staging.busaralabs.com
 #   main       → validate + manual approval gate + deploy to busaralabs.com
 #
-# SECRETS REQUIRED (set in GitHub → Settings → Secrets → Actions):
+# SECRETS REQUIRED (GitHub → Settings → Secrets → Actions):
 #   CLOUDFLARE_API_TOKEN   — Cloudflare API token (Pages deploy permission)
 #   CLOUDFLARE_ACCOUNT_ID  — Cloudflare account ID
 #
+# SECRET SCANNING:
+#   Uses gitleaks CLI v8.30.1 directly — no commercial licence required.
+#   Matches the version installed locally at /usr/local/bin/gitleaks.
+#   Scans full repository contents on every run.
+#   Secret Management Policy § 4.2 — Layer 2 mandatory enforcement.
 # ============================================================
 
 name: BIT Labs Website CI/CD
@@ -38,7 +43,7 @@ concurrency:
 # ============================================================
 # JOB 1: VALIDATE
 # Runs on every push and PR to every branch.
-# Secret scanning, linting, placeholder check.
+# Secret scanning, placeholder check, dependency audit, build.
 # All subsequent jobs depend on this passing.
 # ============================================================
 jobs:
@@ -49,7 +54,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Full history required for gitleaks
+          fetch-depth: 0  # Full history required for gitleaks git log scan
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -63,13 +68,45 @@ jobs:
       # --------------------------------------------------------
       # SECRET SCANNING — Layer 2 mandatory enforcement
       # Secret Management Policy § 4.2
-      # Blocks merge if any secret pattern is detected.
+      #
+      # Uses gitleaks CLI directly — no licence required.
+      # Pinned to v8.30.1 — matches local pre-commit hook version.
+      #
+      # Two-phase scan:
+      #   Phase 1: git log scan — checks all commits in history
+      #   Phase 2: directory scan — catches untracked/staged files
+      #
+      # Exits non-zero if any secret pattern is detected.
+      # Blocks all downstream jobs (deploy-staging, deploy-production).
       # --------------------------------------------------------
-      - name: Secret scanning (gitleaks)
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+      - name: Install gitleaks v8.30.1
+        run: |
+          echo "Downloading gitleaks v8.30.1..."
+          wget -q https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz \
+            -O /tmp/gitleaks.tar.gz
+          tar -xzf /tmp/gitleaks.tar.gz -C /tmp gitleaks
+          chmod +x /tmp/gitleaks
+          /tmp/gitleaks version
+          echo "gitleaks installed successfully"
+
+      - name: Secret scanning — git history (Phase 1)
+        run: |
+          echo "Phase 1: Scanning full git commit history..."
+          /tmp/gitleaks detect \
+            --source . \
+            --verbose \
+            --exit-code 1
+          echo "Phase 1 complete — no secrets found in git history"
+
+      - name: Secret scanning — working directory (Phase 2)
+        run: |
+          echo "Phase 2: Scanning working directory contents..."
+          /tmp/gitleaks detect \
+            --source . \
+            --no-git \
+            --verbose \
+            --exit-code 1
+          echo "Phase 2 complete — no secrets found in working directory"
 
       # --------------------------------------------------------
       # PLACEHOLDER CHECK
@@ -79,7 +116,6 @@ jobs:
       - name: Check for unresolved placeholders
         run: |
           echo "Scanning for unresolved placeholders..."
-          # Exclude node_modules, .git, and this workflow file itself
           if grep -r "REPLACE_WITH_" \
             --include="*.js" \
             --include="*.ts" \
