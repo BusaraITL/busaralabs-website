@@ -1,0 +1,84 @@
+# ============================================================
+# BUSARA INFRASTRUCTURE & TECHNOLOGY LABS
+# Cloudflare Pages Configuration — busaralabs.com
+# Version: 3.0 | June 2026
+# Ref: BUSARALABS-WEBSITE-COMPLETE-SPEC.md § 9.2
+# ============================================================
+#
+# SCOPE: This file configures the Cloudflare Pages project only.
+#   - Static site hosting
+#   - Functions (functions/api/contact.js)
+#   - Resource bindings (D1, KV, Queue producer, Turnstile)
+#
+# SEPARATE WORKER: Queue consumer + cron trigger are configured
+#   in workers/wrangler.worker.toml — deployed independently.
+#
+# ACCOUNT ID:
+#   Injected via CLOUDFLARE_ACCOUNT_ID environment variable.
+#   Never hardcode here — it is a sensitive identifier.
+#
+# ENVIRONMENTS:
+#   Pages supports exactly two named environments:
+#     preview    → staging.busaralabs.com (staging branch)
+#     production → busaralabs.com (main branch)
+#
+# SECRETS — set via Wrangler CLI (Pages syntax):
+#   npx wrangler pages secret put POSTMARK_API_TOKEN
+#   npx wrangler pages secret put TURNSTILE_SECRET_KEY
+#   npx wrangler pages secret put QUEUE_ENCRYPTION_KEY
+#   npx wrangler pages secret put NOTIFY_EMAIL
+# ============================================================
+
+name                   = "busaralabs-website"
+compatibility_date     = "2024-01-01"
+pages_build_output_dir = "."
+
+# ============================================================
+# PREVIEW ENVIRONMENT (staging branch → staging.busaralabs.com)
+# ============================================================
+[env.preview]
+
+[env.preview.vars]
+ENVIRONMENT          = "staging"
+CORS_ORIGIN          = "https://staging.busaralabs.com"
+RATE_LIMIT_IP_MAX    = "10"
+RATE_LIMIT_EMAIL_MAX = "5"
+RETENTION_DAYS       = "90"
+
+[[env.preview.d1_databases]]
+binding       = "DB"
+database_name = "busaralabs-staging-db"
+database_id   = "0bf0fbac-152e-4427-9f1a-47e4873d23db"
+
+[[env.preview.kv_namespaces]]
+binding = "RATE_LIMIT_KV"
+id      = "9133b26c873640f7af02b15e8b9a54a8"
+
+[[env.preview.queues.producers]]
+binding = "CONTACT_QUEUE"
+queue   = "contact-staging"
+
+# ============================================================
+# PRODUCTION ENVIRONMENT (main branch → busaralabs.com)
+# ============================================================
+[env.production]
+
+[env.production.vars]
+ENVIRONMENT          = "production"
+CORS_ORIGIN          = "https://busaralabs.com"
+RATE_LIMIT_IP_MAX    = "5"
+RATE_LIMIT_EMAIL_MAX = "3"
+RETENTION_DAYS       = "90"
+
+[[env.production.d1_databases]]
+binding       = "DB"
+database_name = "busaralabs-prod-db"
+database_id   = "27a86a12-f597-4a23-9835-ee4f3e889185"
+
+[[env.production.kv_namespaces]]
+binding = "RATE_LIMIT_KV"
+id      = "e0f93da5591d40d3938b6c938e7c8d2a"
+
+[[env.production.queues.producers]]
+binding = "CONTACT_QUEUE"
+queue   = "contact-production"

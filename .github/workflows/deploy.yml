@@ -1,0 +1,234 @@
+# ============================================================
+# BUSARA INFRASTRUCTURE & TECHNOLOGY LABS
+# GitHub Actions CI/CD Pipeline — busaralabs.com
+# Version: 1.0 | June 2026
+# Ref: BUSARALABS-WEBSITE-COMPLETE-SPEC.md § 9.1
+# Governs: Validate → Staging → Production (manual gate)
+# ============================================================
+#
+# BRANCH STRATEGY:
+#   feature/*  → validate + preview deploy only
+#   staging    → validate + deploy to staging.busaralabs.com
+#   main       → validate + manual approval gate + deploy to busaralabs.com
+#
+# SECRETS REQUIRED (set in GitHub → Settings → Secrets → Actions):
+#   CLOUDFLARE_API_TOKEN   — Cloudflare API token (Pages deploy permission)
+#   CLOUDFLARE_ACCOUNT_ID  — Cloudflare account ID
+#
+# ============================================================
+
+name: BIT Labs Website CI/CD
+
+on:
+  push:
+    branches:
+      - main
+      - staging
+      - "feature/**"
+  pull_request:
+    branches:
+      - main
+      - staging
+
+# Cancel in-progress runs on the same branch when a new push arrives
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# ============================================================
+# JOB 1: VALIDATE
+# Runs on every push and PR to every branch.
+# Secret scanning, linting, placeholder check.
+# All subsequent jobs depend on this passing.
+# ============================================================
+jobs:
+  validate:
+    name: Validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history required for gitleaks
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      # --------------------------------------------------------
+      # SECRET SCANNING — Layer 2 mandatory enforcement
+      # Secret Management Policy § 4.2
+      # Blocks merge if any secret pattern is detected.
+      # --------------------------------------------------------
+      - name: Secret scanning (gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+
+      # --------------------------------------------------------
+      # PLACEHOLDER CHECK
+      # Blocks deploy if any REPLACE_WITH_ values remain in
+      # files that would reach production.
+      # --------------------------------------------------------
+      - name: Check for unresolved placeholders
+        run: |
+          echo "Scanning for unresolved placeholders..."
+          # Exclude node_modules, .git, and this workflow file itself
+          if grep -r "REPLACE_WITH_" \
+            --include="*.js" \
+            --include="*.ts" \
+            --include="*.toml" \
+            --include="*.json" \
+            --include="*.html" \
+            --include="*.css" \
+            --exclude-dir=node_modules \
+            --exclude-dir=.git \
+            .; then
+            echo "ERROR: Unresolved placeholders found. Resolve before deploying."
+            exit 1
+          fi
+          echo "No unresolved placeholders found."
+
+      # --------------------------------------------------------
+      # DEPENDENCY AUDIT
+      # Fails on critical CVEs in npm dependencies.
+      # --------------------------------------------------------
+      - name: Dependency audit
+        run: npm audit --audit-level=critical
+
+      # --------------------------------------------------------
+      # BUILD
+      # Verifies the build succeeds before any deploy attempt.
+      # --------------------------------------------------------
+      - name: Build assets
+        run: node build.js
+
+      - name: Verify build output
+        run: |
+          echo "Verifying build output exists..."
+          if [ ! -f "assets/js/main.bundle.js" ]; then
+            echo "ERROR: Build output assets/js/main.bundle.js not found."
+            exit 1
+          fi
+          echo "Build output verified."
+          wc -c assets/js/main.bundle.js
+
+  # ============================================================
+  # JOB 2: DEPLOY STAGING
+  # Runs only on push to staging branch.
+  # Deploys to staging.busaralabs.com via Cloudflare Pages.
+  # ============================================================
+  deploy-staging:
+    name: Deploy — Staging
+    runs-on: ubuntu-latest
+    needs: validate
+    if: github.ref == 'refs/heads/staging' && github.event_name == 'push'
+    environment:
+      name: staging
+      url: https://staging.busaralabs.com
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build assets
+        run: node build.js
+
+      - name: Deploy to Cloudflare Pages (staging)
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy . --project-name=busaralabs-website --branch=staging
+
+      # --------------------------------------------------------
+      # SMOKE TEST — staging
+      # Basic HTTP check to confirm the deploy is live.
+      # --------------------------------------------------------
+      - name: Smoke test — staging
+        run: |
+          echo "Running smoke test against staging..."
+          sleep 15  # Allow propagation
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://staging.busaralabs.com)
+          if [ "$STATUS" != "200" ]; then
+            echo "ERROR: Staging smoke test failed. HTTP $STATUS"
+            exit 1
+          fi
+          echo "Staging smoke test passed. HTTP $STATUS"
+
+  # ============================================================
+  # JOB 3: DEPLOY PRODUCTION
+  # Runs only on push to main branch.
+  # REQUIRES MANUAL APPROVAL before Cloudflare deploy executes.
+  # Manual gate configured in GitHub → Environments → production.
+  # ============================================================
+  deploy-production:
+    name: Deploy — Production
+    runs-on: ubuntu-latest
+    needs: validate
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment:
+      name: production
+      url: https://busaralabs.com
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build assets
+        run: node build.js
+
+      - name: Deploy to Cloudflare Pages (production)
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy . --project-name=busaralabs-website --branch=main
+
+      # --------------------------------------------------------
+      # SMOKE TEST — production
+      # --------------------------------------------------------
+      - name: Smoke test — production
+        run: |
+          echo "Running smoke test against production..."
+          sleep 15
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://busaralabs.com)
+          if [ "$STATUS" != "200" ]; then
+            echo "ERROR: Production smoke test failed. HTTP $STATUS"
+            exit 1
+          fi
+          echo "Production smoke test passed. HTTP $STATUS"
+
+      - name: Deployment summary
+        run: |
+          echo "========================================"
+          echo "PRODUCTION DEPLOYMENT COMPLETE"
+          echo "Site: https://busaralabs.com"
+          echo "Commit: ${{ github.sha }}"
+          echo "Triggered by: ${{ github.actor }}"
+          echo "Time: $(date -u)"
+          echo "========================================"
