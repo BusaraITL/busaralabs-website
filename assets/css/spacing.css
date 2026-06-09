@@ -1,0 +1,47 @@
+/* ============================================================
+   BUSARA INFRASTRUCTURE & TECHNOLOGY LABS LTD
+   Design tokens — Spacing, radii, layout
+   Version: 1.0 | June 2026
+   Classification: Public
+   Nairobi, Kenya
+   ============================================================ */
+
+:root {
+  /* ---- Spacing scale (8px base) ---- */
+  --space-1: 0.25rem;   /* 4 */
+  --space-2: 0.5rem;    /* 8 */
+  --space-3: 0.75rem;   /* 12 */
+  --space-4: 1rem;      /* 16 */
+  --space-5: 1.5rem;    /* 24 */
+  --space-6: 2rem;      /* 32 */
+  --space-7: 3rem;      /* 48 */
+  --space-8: 4rem;      /* 64 */
+  --space-9: 6rem;      /* 96 */
+  --space-10: 8rem;     /* 128 */
+
+  /* ---- Section rhythm ---- */
+  --section-pad-y: clamp(4rem, 2rem + 8vw, 8rem);
+  --content-max: 1200px;
+  --measure: 68ch;          /* prose line length */
+  --gutter: clamp(1.25rem, 0.5rem + 3vw, 3rem); /* @kind spacing */
+
+  /* ---- Radii — institutional restraint: minimal rounding ---- */
+  --radius-none: 0;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-pill: 999px;
+
+  /* ---- Borders ---- */
+  --border-width: 1px;
+  --rule-accent: 1px;       /* warm gold structural rule */
+  --rule-length: 40px;      /* section-header rule length */
+
+  /* ---- Elevation — used sparingly; flat institutional surfaces ---- */
+  --shadow-card: 0 1px 2px rgba(0, 26, 51, 0.04), 0 8px 24px rgba(0, 26, 51, 0.06);
+  --shadow-raised: 0 2px 4px rgba(0, 26, 51, 0.06), 0 16px 40px rgba(0, 26, 51, 0.10);
+
+  /* ---- Motion ---- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1); /* @kind other */
+  --dur-fast: 180ms; /* @kind other */
+  --dur-reveal: 420ms; /* @kind other */
+}

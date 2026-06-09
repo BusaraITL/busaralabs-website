@@ -1,0 +1,14 @@
+/* ============================================================
+   BUSARA INFRASTRUCTURE & TECHNOLOGY LABS LTD
+   styles.css — global entry point (import list only)
+   Version: 1.0 | June 2026
+   Classification: Public
+   Nairobi, Kenya
+   Consumers link THIS file. Keep it as @import lines only.
+   ============================================================ */
+
+@import url('tokens/fonts.css');
+@import url('tokens/colors.css');
+@import url('tokens/typography.css');
+@import url('tokens/spacing.css');
+@import url('tokens/base.css');

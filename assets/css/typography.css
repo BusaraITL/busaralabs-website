@@ -1,0 +1,42 @@
+/* ============================================================
+   BUSARA INFRASTRUCTURE & TECHNOLOGY LABS LTD
+   Design tokens — Typography
+   Version: 1.0 | June 2026
+   Classification: Public
+   Nairobi, Kenya
+   ============================================================ */
+
+:root {
+  /* ---- Families ---- */
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* ---- Weights (Plus Jakarta Sans) ---- */
+  --weight-light: 300;
+  --weight-regular: 400;
+  --weight-semibold: 600;
+  --weight-extrabold: 800;
+
+  /* ---- Type scale (clamped, fluid hero/section) ---- */
+  --type-hero: clamp(2.75rem, calc(1.6rem + 5.2vw), 4.5rem);   /* 44 → 72px */
+  --type-page: clamp(2.25rem, calc(1.5rem + 3.4vw), 3.5rem);   /* 36 → 56px */
+  --type-section: clamp(1.875rem, calc(1.4rem + 2vw), 2.5rem); /* 30 → 40px */
+  --type-h3: 1.5rem;        /* 24px — Plus Jakarta SemiBold */
+  --type-display-xl: clamp(7rem, calc(4rem + 14vw), 12.5rem);  /* 404 / watermark — 112 → 200px */
+  --type-body-lg: 1.125rem; /* 18px */
+  --type-body: 1rem;        /* 16px */
+  --type-caption: 0.875rem; /* 14px — mono */
+  --type-label: 0.6875rem;  /* 11px — mono category label */
+
+  /* ---- Line heights ---- */
+  --leading-tight: 1.08;    /* display headings */
+  --leading-snug: 1.25;     /* sub-headings */
+  --leading-body: 1.65;     /* body copy */
+
+  /* ---- Letter-spacing ---- */
+  --tracking-wordmark: 0.08em;   /* Busara Labs wordmark */
+  --tracking-tight: -0.025em;    /* Paamoja wordmark */
+  --tracking-label: 0.2em;       /* mono category labels */
+  --tracking-caption: 0.15em;
+}
