@@ -1,9 +1,80 @@
 /* ============================================================
    BUSARA INFRASTRUCTURE & TECHNOLOGY LABS LTD
    UI Kit — Home page
-   Version: 1.0 | June 2026
+   Version: 1.1 | June 2026
    Classification: Public
    ============================================================ */
+
+function ValueMarquee() {
+  const ITEMS = [
+    'Constitutional Governance',
+    'Infrastructure for Trust',
+    'Kenya-First',
+    'Long-Term Thinking',
+    'Transparency & Trust',
+    'Community-First',
+    'Evidence-Based Trust',
+    'User Empowerment',
+    'A Company for the People',
+    'Speed & Execution',
+    'Accessibility',
+    'Impact-Driven',
+  ];
+
+  const repeated = [...ITEMS, ...ITEMS];
+
+  const keyframes = `
+    @keyframes bl-marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+  `;
+
+  return (
+    <div style={{
+      background: 'var(--color-deep-navy)',
+      borderTop: '1px solid rgba(201,168,76,0.18)',
+      borderBottom: '1px solid rgba(201,168,76,0.18)',
+      overflow: 'hidden',
+      padding: '18px 0',
+    }}>
+      <style>{keyframes}</style>
+      <div style={{
+        display: 'flex',
+        width: 'max-content',
+        animation: 'bl-marquee 38s linear infinite',
+        willChange: 'transform',
+      }}>
+        {repeated.map((item, i) => (
+          <span key={i} style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '28px',
+            paddingRight: '28px',
+          }}>
+            <span style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '11px',
+              fontWeight: 500,
+              letterSpacing: '0.22em',
+              textTransform: 'uppercase',
+              color: 'var(--color-warm-gold)',
+              whiteSpace: 'nowrap',
+            }}>{item}</span>
+            <span style={{
+              display: 'inline-block',
+              width: '4px',
+              height: '4px',
+              background: 'rgba(201,168,76,0.4)',
+              borderRadius: '50%',
+              flexShrink: 0,
+            }} aria-hidden="true" />
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 function HomePage({ onNav }) {
   const D = window.BusaraLabsDesignSystem_284041;
@@ -26,14 +97,28 @@ function HomePage({ onNav }) {
               Infrastructure for Africa's Digital Economy
             </h1>
           </div>
-          <p style={{ maxWidth: '52ch', marginTop: '28px', fontSize: 'var(--type-body-lg)', lineHeight: 1.6, color: 'rgba(248,246,241,0.8)' }}>
-            Busara Labs is building the foundational technology infrastructure upon which Africa's digital economy will operate. Starting with Nairobi.
+          {/* Declaratory line — Warm Gold treatment */}
+          <p style={{
+            marginTop: '24px',
+            fontFamily: 'var(--font-display)',
+            fontSize: 'clamp(1.1rem, 0.9rem + 1vw, 1.4rem)',
+            lineHeight: 1.3,
+            color: 'var(--color-warm-gold)',
+            maxWidth: '44ch',
+          }}>
+            Africa's informal economy deserves real infrastructure.
+          </p>
+          <p style={{ maxWidth: '52ch', marginTop: '20px', fontSize: 'var(--type-body-lg)', lineHeight: 1.6, color: 'rgba(248,246,241,0.75)' }}>
+            Millions of traders run real businesses without the systems formal commerce takes for granted. Not because those systems are too hard to build — because no one has built them for this market, at this level of rigour, with this level of accountability.
           </p>
           <div style={{ marginTop: '36px' }}>
             <EmailLink address="hello@busaralabs.com" size="16px" />
           </div>
         </div>
       </section>
+
+      {/* ---- VALUES MARQUEE STRIP ---- */}
+      <ValueMarquee />
 
       {/* ---- MISSION STRIP ---- */}
       <section style={{ background: 'var(--color-warm-white)', padding: 'var(--section-pad-y) 0' }}>
@@ -45,12 +130,27 @@ function HomePage({ onNav }) {
         </div>
       </section>
 
+      {/* ---- WHAT WE DO ---- */}
+      <section style={{ background: 'var(--color-warm-white)', paddingBottom: 'var(--section-pad-y)' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 var(--gutter)', display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: '56px', alignItems: 'start' }} className="bl-two-col">
+          <SectionHeader label="What We Do" headline="The infrastructure layer beneath commerce." />
+          <div>
+            <p style={{ fontSize: 'var(--type-body-lg)', lineHeight: 1.7, color: 'var(--text-on-light-muted)', maxWidth: '50ch' }}>
+              Busara Labs designs foundational technology systems — the infrastructure layer beneath commerce, not the applications on top of it. Payment systems. Logistics networks. Identity and trust mechanisms. Built constitutionally, governed formally, designed to outlast the people who built them.
+            </p>
+            <p style={{ marginTop: '20px', fontSize: 'var(--type-body-lg)', lineHeight: 1.7, color: 'var(--text-on-light-muted)', maxWidth: '50ch' }}>
+              We exist because the informal economy is not a temporary condition to be solved by consumer apps. It is a permanent, sophisticated market that deserves the same institutional infrastructure that formal economies take for granted. Our first product, Paamoja, is proof that this is possible.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* ---- PAAMOJA FEATURE (Charcoal portal — first appearance of Paamoja Gold) ---- */}
       <section style={{ background: 'var(--color-charcoal)', padding: 'var(--section-pad-y) 0' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 var(--gutter)', display: 'grid', gridTemplateColumns: 'minmax(0,1.4fr) minmax(0,1fr)', gap: '56px', alignItems: 'center' }} className="bl-paamoja-grid">
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '28px' }}>
-              <img src={(window.__resources && window.__resources.paamojaMark) || "../../assets/logo/paamoja-mark.svg"} alt="Paamoja" width="44" height="50" />
+              <img src={(window.__resources && window.__resources.paamojaMark) || "/assets/images/logo/paamoja-mark.svg"} alt="Paamoja" width="44" height="50" />
               <span style={{ fontFamily: 'var(--font-body)', fontWeight: 800, fontSize: '24px', letterSpacing: '-0.025em', color: 'var(--color-warm-white)' }}>Paamoja</span>
             </div>
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-paamoja-gold)', marginBottom: '18px' }}>One Roof, Infinite Possibilities</p>
@@ -80,6 +180,9 @@ function HomePage({ onNav }) {
           <div>
             <p style={{ fontSize: 'var(--type-body-lg)', lineHeight: 1.65, color: 'var(--text-on-light-muted)', maxWidth: '50ch' }}>
               Busara Labs' constitutional commitment is not marketing language. Paamoja is being structured so that the merchants, couriers, and buyers who create its value will participate in its returns. This is how "for the people" becomes structural, not aspirational.
+            </p>
+            <p style={{ marginTop: '16px', fontSize: 'var(--type-body-lg)', lineHeight: 1.65, color: 'var(--text-on-light-muted)', maxWidth: '50ch' }}>
+              Better infrastructure creates better outcomes. Better markets. Better businesses. Better livelihoods.
             </p>
             <p style={{ marginTop: '24px', fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '14px', color: 'var(--text-on-light)' }}>Inquiries</p>
             <EmailLink address="hello@busaralabs.com" color="navy" size="16px" />
