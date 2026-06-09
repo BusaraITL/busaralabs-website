@@ -1,7 +1,7 @@
 /* ============================================================
    BUSARA INFRASTRUCTURE & TECHNOLOGY LABS LTD
    UI Kit — Our Work page
-   Version: 1.1 | June 2026
+   Version: 1.2 | June 2026
    Classification: Public
    ============================================================ */
 
@@ -23,9 +23,10 @@ function WorkPage() {
 
   return (
     <div>
-      {/* ---- PAGE HERO ---- */}
-      <section style={{ background: 'var(--color-deep-navy)', padding: 'calc(var(--section-pad-y) + 40px) 0 var(--section-pad-y)' }}>
-        <div style={wrap}>
+      {/* ---- PAGE HERO — Deep Navy + NodeNetwork ---- */}
+      <section style={{ position: 'relative', background: 'var(--color-deep-navy)', padding: 'calc(var(--section-pad-y) + 40px) 0 var(--section-pad-y)', overflow: 'hidden' }}>
+        <NodeNetwork />
+        <div style={{ position: 'relative', ...wrap }}>
           <span className="bl-label" style={{ display: 'block', marginBottom: '24px' }}>Our Work</span>
           <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--type-page)', lineHeight: 1.05, color: 'var(--color-warm-white)', maxWidth: '20ch' }}>
             What Busara Labs knows how to build.
@@ -36,24 +37,17 @@ function WorkPage() {
         </div>
       </section>
 
-      {/* ---- THE PROBLEM ---- */}
-      <section style={{ background: 'var(--color-deep-navy)', paddingBottom: 'var(--section-pad-y)' }}>
-        <div style={wrap}>
+      {/* ---- THE PROBLEM — Deep Navy + NodeNetwork ---- */}
+      <section style={{ position: 'relative', background: 'var(--color-deep-navy)', paddingBottom: 'var(--section-pad-y)', overflow: 'hidden' }}>
+        <NodeNetwork />
+        <div style={{ position: 'relative', ...wrap }}>
           <div style={{ borderTop: '1px solid rgba(201,168,76,0.2)', paddingTop: '48px' }}>
             <SectionHeader label="The Problem" headline="Infrastructure that was never built." onDark />
             <div style={{ marginTop: '40px', display: 'flex', flexDirection: 'column', gap: '22px', maxWidth: '70ch' }}>
-              <p style={prose}>
-                Formal economies run on invisible systems — payment rails, identity networks, logistics infrastructure, trust mechanisms. These systems were built decades ago for a specific kind of participant: banked, registered, and smartphone-enabled.
-              </p>
-              <p style={prose}>
-                The informal economy has never had an equivalent. Not because building it is impossible. Because no institution has prioritised doing it properly — with constitutional governance, regulatory discipline, and the long-term commitment that real infrastructure requires. Imported solutions, however well-intentioned, are optimised for markets they were designed for. They arrive with assumptions baked in that do not survive contact with how commerce actually works here.
-              </p>
-              <p style={prose}>
-                The result is a persistent infrastructure gap that keeps millions of capable, active economic participants operating below their potential. Not because they lack ambition or capability — because the systems that would amplify both have never been built for them.
-              </p>
-              <p style={prose}>
-                Closing that gap requires more than technology. It requires institutional innovation — new governance models, new ownership structures, new standards of accountability. It requires the conviction that everyone deserves an equal shot at the tools that make economic participation reliable, trustworthy, and rewarding.
-              </p>
+              <p style={prose}>Formal economies run on invisible systems — payment rails, identity networks, logistics infrastructure, trust mechanisms. These systems were built decades ago for a specific kind of participant: banked, registered, and smartphone-enabled.</p>
+              <p style={prose}>The informal economy has never had an equivalent. Not because building it is impossible. Because no institution has prioritised doing it properly — with constitutional governance, regulatory discipline, and the long-term commitment that real infrastructure requires. Imported solutions, however well-intentioned, are optimised for markets they were designed for. They arrive with assumptions baked in that do not survive contact with how commerce actually works here.</p>
+              <p style={prose}>The result is a persistent infrastructure gap that keeps millions of capable, active economic participants operating below their potential. Not because they lack ambition or capability — because the systems that would amplify both have never been built for them.</p>
+              <p style={prose}>Closing that gap requires more than technology. It requires institutional innovation — new governance models, new ownership structures, new standards of accountability. It requires the conviction that everyone deserves an equal shot at the tools that make economic participation reliable, trustworthy, and rewarding.</p>
               <p style={{ ...prose, color: 'var(--color-warm-white)', fontFamily: 'var(--font-display)', fontSize: 'clamp(1rem, 0.85rem + 0.8vw, 1.2rem)', lineHeight: 1.4 }}>
                 Busara Labs exists to build that infrastructure. Paamoja is the first expression of that vision: a unified economic operating network designed to make participation in commerce more accessible, trustworthy, and rewarding for everyone.
               </p>
@@ -67,9 +61,7 @@ function WorkPage() {
         <div style={wrap}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(330px, 1fr))', gap: '0', borderTop: '1px solid var(--border-subtle)' }}>
             {CAPABILITIES.map(c => (
-              <article key={c.n} style={{
-                padding: '40px 40px 40px 0', borderBottom: '1px solid var(--border-subtle)',
-              }} className="bl-cap">
+              <article key={c.n} style={{ padding: '40px 40px 40px 0', borderBottom: '1px solid var(--border-subtle)' }}>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '16px', marginBottom: '18px' }}>
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', letterSpacing: '0.15em', color: 'var(--text-accent)' }}>{c.n}</span>
                   <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 400, fontSize: '26px', lineHeight: 1.1, color: 'var(--text-on-light)' }}>{c.t}</h3>

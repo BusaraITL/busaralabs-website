@@ -1,7 +1,7 @@
 /* ============================================================
    BUSARA INFRASTRUCTURE & TECHNOLOGY LABS LTD
    UI Kit — NodeNetwork canvas animation
-   Version: 1.0 | June 2026
+   Version: 1.1 | June 2026
    Classification: Public
    ============================================================ */
 
@@ -10,6 +10,9 @@
  * very low-opacity edges. requestAnimationFrame, subtle mouse parallax on
  * desktop, reduced density + no interaction on mobile. Graceful: if canvas is
  * unavailable the solid navy background remains. aria-hidden.
+ *
+ * v1.1: Intersection Observer pauses animation when section is off-screen,
+ * making it safe to run multiple instances across a page simultaneously.
  */
 function NodeNetwork({ height = '100%', accent = '#C9A84C' }) {
   const canvasRef = React.useRef(null);
@@ -22,6 +25,7 @@ function NodeNetwork({ height = '100%', accent = '#C9A84C' }) {
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let w, h, dpr, nodes = [], raf, mouse = { x: 0, y: 0, active: false };
+    let visible = false;
 
     function isMobile() { return window.innerWidth < 760; }
 
@@ -88,8 +92,18 @@ function NodeNetwork({ height = '100%', accent = '#C9A84C' }) {
     }
 
     function loop() {
+      if (!visible) { raf = null; return; }
       drawFrame();
       raf = requestAnimationFrame(loop);
+    }
+
+    function start() {
+      if (raf) return;
+      raf = requestAnimationFrame(loop);
+    }
+
+    function stop() {
+      if (raf) { cancelAnimationFrame(raf); raf = null; }
     }
 
     function onMove(e) {
@@ -100,19 +114,29 @@ function NodeNetwork({ height = '100%', accent = '#C9A84C' }) {
     }
     function onLeave() { mouse.active = false; }
 
+    // Intersection Observer — pause when off-screen
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting;
+        if (visible && !reduce) start();
+        else stop();
+      },
+      { threshold: 0.01 }
+    );
+    observer.observe(canvas);
+
     resize();
-    drawFrame(); // immediate first paint — independent of rAF scheduling
-    if (!reduce) {
-      raf = requestAnimationFrame(loop);
-      if (!isMobile()) {
-        canvas.addEventListener('mousemove', onMove);
-        canvas.addEventListener('mouseleave', onLeave);
-      }
+    drawFrame(); // immediate first paint
+
+    if (!reduce && !isMobile()) {
+      canvas.addEventListener('mousemove', onMove);
+      canvas.addEventListener('mouseleave', onLeave);
     }
     window.addEventListener('resize', resize);
 
     return () => {
-      cancelAnimationFrame(raf);
+      stop();
+      observer.disconnect();
       window.removeEventListener('resize', resize);
       canvas.removeEventListener('mousemove', onMove);
       canvas.removeEventListener('mouseleave', onLeave);

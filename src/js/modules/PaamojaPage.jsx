@@ -1,7 +1,7 @@
 /* ============================================================
    BUSARA INFRASTRUCTURE & TECHNOLOGY LABS LTD
    UI Kit — Paamoja vision page
-   Version: 1.0 | June 2026
+   Version: 1.1 | June 2026
    Classification: Public
    ============================================================ */
 
@@ -11,7 +11,7 @@ function PaamojaPage() {
 
   const wrap = { maxWidth: '1200px', margin: '0 auto', padding: '0 var(--gutter)' };
   const ELEMENTS = [
-    { n: '01', t: 'HuruMarket', m: 'Named for freedom', b: 'Where buyers discover and shop from Nairobi\u2019s merchants.' },
+    { n: '01', t: 'HuruMarket', m: 'Named for freedom', b: 'Where buyers discover and shop from Nairobi\'s merchants.' },
     { n: '02', t: 'Duka', m: 'The merchant system', b: 'Every shop owner who joins becomes a node in the network.' },
     { n: '03', t: 'Tuma', m: 'To send', b: 'The logistics rail. Goods move from merchant to buyer, tracked and accountable.' },
     { n: '04', t: 'e-pay', m: 'Trust by design', b: 'The payment escrow layer. Payment held until delivery confirmed.' },
@@ -19,10 +19,10 @@ function PaamojaPage() {
 
   return (
     <div>
-      {/* HERO — Charcoal portal */}
+      {/* ---- HERO — Charcoal (no NodeNetwork — Charcoal is not a NodeNetwork surface) ---- */}
       <section style={{ background: 'var(--color-charcoal)', padding: 'calc(var(--section-pad-y) + 40px) 0 var(--section-pad-y)' }}>
         <div style={{ ...wrap, display: 'grid', gridTemplateColumns: 'auto minmax(0,1fr)', gap: '48px', alignItems: 'center' }} className="bl-paamoja-hero">
-          <img src={(window.__resources && window.__resources.paamojaMark) || "../../assets/logo/paamoja-mark.svg"} alt="Paamoja" width="140" height="158" />
+          <img src={(window.__resources && window.__resources.paamojaMark) || "/assets/images/logo/paamoja-mark.svg"} alt="Paamoja" width="140" height="158" />
           <div>
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-paamoja-gold)', marginBottom: '18px' }}>Paamoja · A Busara Labs Product</p>
             <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--type-page)', lineHeight: 1.04, color: 'var(--color-warm-white)', maxWidth: '16ch' }}>
@@ -38,9 +38,10 @@ function PaamojaPage() {
         </div>
       </section>
 
-      {/* 1 — What it's built to do */}
-      <section style={{ background: 'var(--color-deep-navy)', padding: 'var(--section-pad-y) 0' }}>
-        <div style={{ ...wrap, display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: '56px' }} className="bl-two-col">
+      {/* ---- 1: WHAT IT'S BUILT TO DO — Deep Navy + NodeNetwork ---- */}
+      <section style={{ position: 'relative', background: 'var(--color-deep-navy)', padding: 'var(--section-pad-y) 0', overflow: 'hidden' }}>
+        <NodeNetwork />
+        <div style={{ position: 'relative', ...wrap, display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: '56px' }} className="bl-two-col">
           <SectionHeader label="What Paamoja Is Being Built To Do" headline="Connect what is fragmented." onDark accent="paamoja" />
           <p style={{ fontSize: 'var(--type-body-lg)', lineHeight: 1.7, color: 'rgba(248,246,241,0.82)', maxWidth: '52ch' }}>
             Nairobi's informal economy is large, active, and underserved by existing platforms. Commerce happens. Logistics happens. Payments happen. But they happen in fragmented, unreliable, often untrusted ways. Paamoja is being built to change that — to connect merchants, couriers, and buyers under a single trusted platform with reliable logistics and fair, guaranteed payment.
@@ -48,7 +49,7 @@ function PaamojaPage() {
         </div>
       </section>
 
-      {/* 2 — The platform (four elements) */}
+      {/* ---- 2: THE PLATFORM — Charcoal ---- */}
       <section style={{ background: 'var(--color-charcoal)', padding: 'var(--section-pad-y) 0' }}>
         <div style={wrap}>
           <SectionHeader label="The Platform" headline="Four elements, working as one." onDark accent="paamoja" />
@@ -60,9 +61,10 @@ function PaamojaPage() {
         </div>
       </section>
 
-      {/* 3 — Built for everyone */}
-      <section style={{ background: 'var(--color-deep-navy)', padding: 'var(--section-pad-y) 0' }}>
-        <div style={{ ...wrap, display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: '56px' }} className="bl-two-col">
+      {/* ---- 3: BUILT FOR EVERYONE — Deep Navy + NodeNetwork ---- */}
+      <section style={{ position: 'relative', background: 'var(--color-deep-navy)', padding: 'var(--section-pad-y) 0', overflow: 'hidden' }}>
+        <NodeNetwork />
+        <div style={{ position: 'relative', ...wrap, display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: '56px' }} className="bl-two-col">
           <SectionHeader label="Built for Everyone in It" headline="One platform. Multiple roles." onDark accent="paamoja" />
           <p style={{ fontSize: 'var(--type-body-lg)', lineHeight: 1.7, color: 'rgba(248,246,241,0.82)', maxWidth: '52ch' }}>
             A bodaboda rider can be a courier, a buyer, and a merchant on the same platform with one identity. Paamoja is designed for the full complexity of how people in Nairobi actually work.
@@ -70,7 +72,7 @@ function PaamojaPage() {
         </div>
       </section>
 
-      {/* 4 — Owned by its members */}
+      {/* ---- 4: OWNED BY ITS MEMBERS — Charcoal ---- */}
       <section style={{ background: 'var(--color-charcoal)', padding: 'var(--section-pad-y) 0' }}>
         <div style={wrap}>
           <PullQuote onDark accent="paamoja" size="lg">
@@ -82,9 +84,10 @@ function PaamojaPage() {
         </div>
       </section>
 
-      {/* 5 — Payment for Kenya */}
-      <section style={{ background: 'var(--color-deep-navy)', padding: 'var(--section-pad-y) 0' }}>
-        <div style={{ ...wrap, display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: '56px' }} className="bl-two-col">
+      {/* ---- 5: PAYMENT FOR KENYA — Deep Navy + NodeNetwork ---- */}
+      <section style={{ position: 'relative', background: 'var(--color-deep-navy)', padding: 'var(--section-pad-y) 0', overflow: 'hidden' }}>
+        <NodeNetwork />
+        <div style={{ position: 'relative', ...wrap, display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: '56px' }} className="bl-two-col">
           <SectionHeader label="Payment Built for Kenya" headline="Built with M-Pesa at its core." onDark accent="paamoja" />
           <p style={{ fontSize: 'var(--type-body-lg)', lineHeight: 1.7, color: 'rgba(248,246,241,0.82)', maxWidth: '52ch' }}>
             Paamoja is being built with M-Pesa at its core — integrated directly via the Daraja API. Payment that works the way Nairobi works.
@@ -92,7 +95,7 @@ function PaamojaPage() {
         </div>
       </section>
 
-      {/* 6 — Coming to Nairobi */}
+      {/* ---- 6: COMING TO NAIROBI — Charcoal ---- */}
       <section style={{ background: 'var(--color-charcoal)', padding: 'var(--section-pad-y) 0' }}>
         <div style={wrap}>
           <SectionHeader label="Coming to Nairobi" headline="When we launch, it will be ready." onDark accent="paamoja" />
