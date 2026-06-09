@@ -7,10 +7,15 @@
 
 function ValueMarquee() {
   const ITEMS = [
-    'Constitutional Governance', 'Infrastructure for Trust', 'Kenya-First',
-    'Long-Term Thinking', 'Transparency & Trust', 'Community-First',
-    'Evidence-Based Trust', 'User Empowerment', 'A Company for the People',
-    'Speed & Execution', 'Accessibility', 'Impact-Driven',
+    'Innovation & Technical Excellence',
+    'Impact-Driven',
+    'Long-Term Thinking',
+    'Accessibility',
+    'User Empowerment & Financial Inclusion',
+    'Transparency & Trust',
+    'Community-First',
+    'Speed & Execution',
+    'A Company for the People',
   ];
   const repeated = [...ITEMS, ...ITEMS];
   const keyframes = `

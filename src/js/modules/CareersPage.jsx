@@ -13,7 +13,7 @@ function CareersPage() {
   const QUALITIES = [
     { n: '01', t: 'Constitutional thinkers', b: 'People who design systems with governance built in, not bolted on. Who anticipate failure modes before writing the first line of code.' },
     { n: '02', t: 'Long-term builders', b: 'People who optimise for durability, not velocity. Who understand that infrastructure built to last a decade looks different from a product built for a launch.' },
-    { n: '03', t: 'Kenya-rooted', b: 'People who understand this market from the inside, not from a case study. Who know why WhatsApp is the right interface, why M-Pesa matters, why the informal economy is not a problem to be solved but a community to be served.' },
+    { n: '03', t: 'Community-rooted', b: 'People who understand this market from the inside, not from a case study. Who know why WhatsApp is the right interface, why M-Pesa matters, why the informal economy is not a problem to be solved but a community to be served.' },
     { n: '04', t: 'Technically rigorous', b: 'People who hold themselves to the standard that infrastructure demands. Who would rather do it right than do it fast — and who know the difference.' },
   ];
 
