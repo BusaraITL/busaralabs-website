@@ -1,15 +1,10 @@
 /* ============================================================
    BUSARA INFRASTRUCTURE & TECHNOLOGY LABS LTD
    UI Kit — Site navigation
-   Version: 1.0 | June 2026
+   Version: 1.1 | June 2026
    Classification: Public
    ============================================================ */
 
-/**
- * SiteNav — sticky navigation. Transparent over the hero, gains a Deep Navy
- * background + subtle bottom border past 50px scroll. Mark + wordmark left,
- * links centre, email right. Mobile: hamburger → full-screen navy overlay.
- */
 function SiteNav({ page, onNav, scrollRef }) {
   const { EmailLink } = window.BusaraLabsDesignSystem_284041;
   const [scrolled, setScrolled] = React.useState(false);
@@ -25,10 +20,11 @@ function SiteNav({ page, onNav, scrollRef }) {
   }, [scrollRef]);
 
   const links = [
-    { id: 'home', label: 'Home' },
-    { id: 'about', label: 'About' },
-    { id: 'work', label: 'Our Work' },
+    { id: 'home',    label: 'Home' },
+    { id: 'about',   label: 'About' },
+    { id: 'work',    label: 'Our Work' },
     { id: 'paamoja', label: 'Paamoja' },
+    { id: 'contact', label: 'Contact' },
   ];
 
   const go = (id) => { setMenu(false); onNav(id); };
@@ -56,7 +52,7 @@ function SiteNav({ page, onNav, scrollRef }) {
       }}>
         {/* Mark + wordmark */}
         <button onClick={() => go('home')} style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'none', border: 0, cursor: 'pointer' }} aria-label="Busara Labs — home">
-          <img src={(window.__resources && window.__resources.busaraMark) || "../../assets/logo/busara-labs-mark.svg"} alt="" width="34" height="38" />
+          <img src={(window.__resources && window.__resources.busaraMark) || "/assets/images/logo/busara-labs-mark.svg"} alt="" width="34" height="38" />
           <span style={{ display: 'flex', flexDirection: 'column', gap: '2px', textAlign: 'left' }}>
             <span style={{ fontFamily: 'var(--font-body)', fontWeight: 800, fontSize: '17px', letterSpacing: '0.08em', color: 'var(--color-warm-white)' }}>Busara&nbsp;Labs</span>
             <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 500, fontSize: '8px', textTransform: 'uppercase', letterSpacing: '0.2em', color: 'var(--color-warm-gold)' }}>Infrastructure for Trust</span>

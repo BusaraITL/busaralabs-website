@@ -54,6 +54,8 @@ window.__resources = {
 <script type="text/babel" src="/src/js/modules/WorkPage.jsx"></script>
 <script type="text/babel" src="/src/js/modules/PaamojaPage.jsx"></script>
 <script type="text/babel" src="/src/js/modules/LegalPages.jsx"></script>
+<script type="text/babel" src="/src/js/modules/ContactPage.jsx"></script>
+<script type="text/babel" src="/src/js/modules/CareersPage.jsx"></script>
 
 <script type="text/babel">
   const { useState, useEffect } = React;
@@ -77,10 +79,12 @@ window.__resources = {
       case 'privacy': view = <PrivacyPage onNav={nav} />; break;
       case 'terms':   view = <TermsPage onNav={nav} />;   break;
       case '404':     view = <NotFoundPage onNav={nav} />; break;
+      case 'contact': view = <ContactPage onNav={nav} />; break;
+      case 'careers': view = <CareersPage onNav={nav} />; break;
       default:        view = <HomePage onNav={nav} />;
     }
 
-    const navPage = ['home', 'about', 'work', 'paamoja'].includes(page) ? page : null;
+    const navPage = ['home', 'about', 'work', 'paamoja', 'contact'].includes(page) ? page : null;
 
     return (
       <div>
