@@ -1,5 +1,10 @@
-<!-- @dsCard group="Website" viewport="1280x860" name="Busara Labs website" subtitle="Phase A brochure — Home, About, Our Work, Paamoja" -->
-<!-- @startingPoint section="Website" subtitle="Full Busara Labs Phase A brochure site" viewport="1280x860" -->
+<!-- ============================================================
+   BUSARA INFRASTRUCTURE & TECHNOLOGY LABS LTD
+   Site entry point — Phase A static brochure
+   Version: 1.0 | June 2026
+   Classification: Public
+   Nairobi, Kenya
+   ============================================================ -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,14 +12,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
 <title>Busara Labs — Infrastructure for Trust</title>
-<link rel="icon" href="../../assets/logo/favicon.svg" type="image/svg+xml">
-<meta name="ext-resource-dependency" content="../../assets/logo/busara-labs-mark.svg" data-resource-id="busaraMark" />
-<meta name="ext-resource-dependency" content="../../assets/logo/paamoja-mark.svg" data-resource-id="paamojaMark" />
-<!-- Fonts: self-hosted WOFF2 via styles.css → tokens/fonts.css (no third-party font CDN) -->
-<link rel="stylesheet" href="../../styles.css">
+<meta name="description" content="Busara Labs builds foundational technology infrastructure for Africa's digital economy — starting with Nairobi.">
+<link rel="icon" href="/assets/images/logo/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="/site.webmanifest">
+<meta property="og:title" content="Busara Labs — Infrastructure for Trust">
+<meta property="og:description" content="Building foundational technology infrastructure for Africa's digital economy.">
+<meta property="og:image" content="/assets/images/og-image.png">
+<meta property="og:url" content="https://busaralabs.com">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="/assets/css/styles.css">
 <style>
   html, body { margin: 0; background: var(--color-deep-navy); }
-  /* Responsive collapses */
+  #root { min-height: 100vh; }
   @media (max-width: 860px) {
     .bl-nav-links, .bl-nav-email { display: none !important; }
     .bl-nav-burger { display: flex !important; }
@@ -23,31 +32,28 @@
 </style>
 </head>
 <body>
-<template id="__bundler_thumbnail" data-bg-color="#001A33">
-  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
-    <rect width="1200" height="800" fill="#001A33"/>
-    <polygon points="480,520 720,520 672,280 528,280" fill="#F8F6F1"/>
-    <line x1="561" y1="320" x2="561" y2="480" stroke="#001A33" stroke-width="16" stroke-linecap="square"/>
-    <path d="M561,320 H612 C636,320 649,337 649,356 C649,375 636,388 612,388 H561" stroke="#001A33" stroke-width="16" fill="none" stroke-linecap="square"/>
-    <path d="M561,388 H617 C644,388 660,405 660,427 C660,449 644,480 617,480 H561" stroke="#001A33" stroke-width="16" fill="none" stroke-linecap="square"/>
-    <text x="600" y="600" fill="#C9A84C" font-family="monospace" font-size="26" letter-spacing="10" text-anchor="middle">BUSARA LABS</text>
-  </svg>
-</template>
 <div id="root"></div>
 
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
-<script src="../../_ds_bundle.js"></script>
 
-<script type="text/babel" src="NodeNetwork.jsx"></script>
-<script type="text/babel" src="SiteNav.jsx"></script>
-<script type="text/babel" src="SiteFooter.jsx"></script>
-<script type="text/babel" src="HomePage.jsx"></script>
-<script type="text/babel" src="AboutPage.jsx"></script>
-<script type="text/babel" src="WorkPage.jsx"></script>
-<script type="text/babel" src="PaamojaPage.jsx"></script>
-<script type="text/babel" src="LegalPages.jsx"></script>
+<script>
+window.__resources = {
+  busaraMark: '/assets/images/logo/busara-labs-mark.svg',
+  paamojaMark: '/assets/images/logo/paamoja-mark.svg'
+};
+</script>
+
+<script type="text/babel" src="/src/js/modules/BusaraLabsComponents.jsx"></script>
+<script type="text/babel" src="/src/js/modules/NodeNetwork.jsx"></script>
+<script type="text/babel" src="/src/js/modules/SiteNav.jsx"></script>
+<script type="text/babel" src="/src/js/modules/SiteFooter.jsx"></script>
+<script type="text/babel" src="/src/js/modules/HomePage.jsx"></script>
+<script type="text/babel" src="/src/js/modules/AboutPage.jsx"></script>
+<script type="text/babel" src="/src/js/modules/WorkPage.jsx"></script>
+<script type="text/babel" src="/src/js/modules/PaamojaPage.jsx"></script>
+<script type="text/babel" src="/src/js/modules/LegalPages.jsx"></script>
 
 <script type="text/babel">
   const { useState, useEffect } = React;
@@ -65,13 +71,13 @@
 
     let view;
     switch (page) {
-      case 'about': view = <AboutPage onNav={nav} />; break;
-      case 'work': view = <WorkPage onNav={nav} />; break;
+      case 'about':   view = <AboutPage onNav={nav} />;   break;
+      case 'work':    view = <WorkPage onNav={nav} />;    break;
       case 'paamoja': view = <PaamojaPage onNav={nav} />; break;
       case 'privacy': view = <PrivacyPage onNav={nav} />; break;
-      case 'terms': view = <TermsPage onNav={nav} />; break;
-      case '404': view = <NotFoundPage onNav={nav} />; break;
-      default: view = <HomePage onNav={nav} />;
+      case 'terms':   view = <TermsPage onNav={nav} />;   break;
+      case '404':     view = <NotFoundPage onNav={nav} />; break;
+      default:        view = <HomePage onNav={nav} />;
     }
 
     const navPage = ['home', 'about', 'work', 'paamoja'].includes(page) ? page : null;

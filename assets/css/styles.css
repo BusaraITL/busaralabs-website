@@ -4,11 +4,11 @@
    Version: 1.0 | June 2026
    Classification: Public
    Nairobi, Kenya
-   Consumers link THIS file. Keep it as @import lines only.
+   Consumers link THIS file. Keep as @import lines only.
    ============================================================ */
 
-@import url('tokens/fonts.css');
-@import url('tokens/colors.css');
-@import url('tokens/typography.css');
-@import url('tokens/spacing.css');
-@import url('tokens/base.css');
+@import url('fonts.css');
+@import url('colors.css');
+@import url('typography.css');
+@import url('spacing.css');
+@import url('base.css');
