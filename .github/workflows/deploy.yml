@@ -196,16 +196,37 @@ jobs:
       # SMOKE TEST — staging
       # Basic HTTP check to confirm the deploy is live.
       # --------------------------------------------------------
+      - name: Get staging deployment URL
+        id: get_url
+        run: |
+          echo "Fetching latest Pages deployment URL..."
+          DEPLOY_URL=$(npx wrangler pages deployment list \
+            --project-name=busaralabs-website \
+            2>&1 | grep "busaralabs-website.pages.dev" | head -1 | \
+            grep -o "https://[a-z0-9]*\.busaralabs-website\.pages\.dev")
+          echo "deploy_url=$DEPLOY_URL" >> $GITHUB_OUTPUT
+          echo "Deployment URL: $DEPLOY_URL"
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
       - name: Smoke test — staging
         run: |
-          echo "Running smoke test against staging..."
-          sleep 15  # Allow propagation
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://staging.busaralabs.com)
+          echo "Running smoke test against deployment URL..."
+          DEPLOY_URL="${{ steps.get_url.outputs.deploy_url }}"
+          if [ -z "$DEPLOY_URL" ]; then
+            echo "ERROR: Could not determine deployment URL"
+            exit 1
+          fi
+          echo "Testing: $DEPLOY_URL"
+          sleep 10
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$DEPLOY_URL")
           if [ "$STATUS" != "200" ]; then
             echo "ERROR: Staging smoke test failed. HTTP $STATUS"
             exit 1
           fi
           echo "Staging smoke test passed. HTTP $STATUS"
+          echo "Note: staging.busaralabs.com served via Cloudflare zone — bot protection active (expected)"
 
   # ============================================================
   # JOB 3: DEPLOY PRODUCTION
