@@ -269,16 +269,43 @@ jobs:
       # --------------------------------------------------------
       # SMOKE TEST — production
       # --------------------------------------------------------
+      - name: Get production deployment URL
+        id: get_prod_url
+        run: |
+          echo "Fetching latest Pages deployment URL..."
+          DEPLOY_URL=$(npx wrangler pages deployment list \
+            --project-name=busaralabs-website \
+            2>&1 | grep "busaralabs-website.pages.dev" | grep "Production" | head -1 | \
+            grep -o "https://[a-z0-9]*\.busaralabs-website\.pages\.dev")
+          if [ -z "$DEPLOY_URL" ]; then
+            DEPLOY_URL=$(npx wrangler pages deployment list \
+              --project-name=busaralabs-website \
+              2>&1 | grep "busaralabs-website.pages.dev" | head -1 | \
+              grep -o "https://[a-z0-9]*\.busaralabs-website\.pages\.dev")
+          fi
+          echo "deploy_url=$DEPLOY_URL" >> $GITHUB_OUTPUT
+          echo "Deployment URL: $DEPLOY_URL"
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
       - name: Smoke test — production
         run: |
-          echo "Running smoke test against production..."
-          sleep 15
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://busaralabs.com)
+          echo "Running smoke test against deployment URL..."
+          DEPLOY_URL="${{ steps.get_prod_url.outputs.deploy_url }}"
+          if [ -z "$DEPLOY_URL" ]; then
+            echo "ERROR: Could not determine deployment URL"
+            exit 1
+          fi
+          echo "Testing: $DEPLOY_URL"
+          sleep 10
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$DEPLOY_URL")
           if [ "$STATUS" != "200" ]; then
             echo "ERROR: Production smoke test failed. HTTP $STATUS"
             exit 1
           fi
           echo "Production smoke test passed. HTTP $STATUS"
+          echo "Note: busaralabs.com served via Cloudflare zone — bot protection active (expected)"
 
       - name: Deployment summary
         run: |
