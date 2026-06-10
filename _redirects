@@ -1,0 +1,9 @@
+# ============================================================
+# BUSARA INFRASTRUCTURE & TECHNOLOGY LABS LTD
+# _redirects — Cloudflare Pages SPA fallback
+# Version: 1.0 | June 2026 | Classification: Public
+# All paths serve index.html — React router handles routing.
+# www redirect handled at Cloudflare DNS level.
+# ============================================================
+
+/*    /index.html    200

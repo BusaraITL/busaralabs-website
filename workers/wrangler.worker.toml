@@ -1,0 +1,124 @@
+# ============================================================
+# BUSARA INFRASTRUCTURE & TECHNOLOGY LABS
+# Cloudflare Worker Configuration — Queue Consumer + Cron
+# Version: 1.0 | June 2026
+# Ref: BUSARALABS-WEBSITE-COMPLETE-SPEC.md § 9.2
+# ============================================================
+#
+# SCOPE: This file configures the standalone Worker that handles:
+#   - Queue consumer (contact-staging, contact-production)
+#   - Cron trigger (daily 90-day retention cleanup — ODPC § 49)
+#   - Durable Object (RateLimiter — burst protection)
+#
+# SEPARATE FROM PAGES: The Pages project (wrangler.toml) handles
+#   static hosting and Functions. This Worker handles async
+#   processing that cannot run inside Pages Functions.
+#
+# DEPLOY COMMANDS:
+#   Staging:    npx wrangler deploy --config workers/wrangler.worker.toml --env staging
+#   Production: npx wrangler deploy --config workers/wrangler.worker.toml --env production
+#
+# ACCOUNT ID:
+#   Injected via CLOUDFLARE_ACCOUNT_ID environment variable.
+#
+# SECRETS — set via Wrangler CLI (Workers syntax):
+#   npx wrangler secret put POSTMARK_API_TOKEN   --env staging   --config workers/wrangler.worker.toml
+#   npx wrangler secret put POSTMARK_API_TOKEN   --env production --config workers/wrangler.worker.toml
+#   npx wrangler secret put QUEUE_ENCRYPTION_KEY --env staging   --config workers/wrangler.worker.toml
+#   npx wrangler secret put QUEUE_ENCRYPTION_KEY --env production --config workers/wrangler.worker.toml
+#   npx wrangler secret put NOTIFY_EMAIL         --env staging   --config workers/wrangler.worker.toml
+#   npx wrangler secret put NOTIFY_EMAIL         --env production --config workers/wrangler.worker.toml
+# ============================================================
+
+name               = "busaralabs-queue-consumer"
+main               = "workers/_worker.js"
+compatibility_date = "2024-01-01"
+
+# ============================================================
+# DURABLE OBJECTS
+# RateLimiter provides burst protection beyond KV rate limiting.
+# Defined in workers/_worker.js and exported as RateLimiter.
+# ============================================================
+[[durable_objects.bindings]]
+name       = "RATE_LIMITER"
+class_name = "RateLimiter"
+
+[[migrations]]
+tag                = "v1"
+new_sqlite_classes = ["RateLimiter"]
+
+# ============================================================
+# CRON TRIGGERS
+# Daily retention cleanup — ODPC § 49 (90-day auto-delete)
+# Runs at 02:00 UTC daily across both environments.
+# ============================================================
+[triggers]
+crons = ["0 2 * * *"]
+
+# ============================================================
+# ENVIRONMENT: STAGING
+# ============================================================
+[env.staging]
+name = "busaralabs-queue-consumer-staging"
+
+[env.staging.vars]
+ENVIRONMENT = "staging"
+
+[[env.staging.d1_databases]]
+binding       = "DB"
+database_name = "busaralabs-staging-db"
+database_id   = "0bf0fbac-152e-4427-9f1a-47e4873d23db"
+
+[[env.staging.kv_namespaces]]
+binding = "RATE_LIMIT_KV"
+id      = "9133b26c873640f7af02b15e8b9a54a8"
+
+[[env.staging.queues.consumers]]
+queue             = "contact-staging"
+max_batch_size    = 10
+max_batch_timeout = 30
+max_retries       = 3
+dead_letter_queue = "contact-staging-dlq"
+
+[[env.staging.durable_objects.bindings]]
+name       = "RATE_LIMITER"
+class_name = "RateLimiter"
+
+# Secrets (set via wrangler secret put --env staging --config workers/wrangler.worker.toml):
+# POSTMARK_API_TOKEN
+# QUEUE_ENCRYPTION_KEY
+# NOTIFY_EMAIL
+
+# ============================================================
+# ENVIRONMENT: PRODUCTION
+# ============================================================
+[env.production]
+name = "busaralabs-queue-consumer-production"
+
+[env.production.vars]
+ENVIRONMENT = "production"
+
+[[env.production.d1_databases]]
+binding       = "DB"
+database_name = "busaralabs-prod-db"
+database_id   = "27a86a12-f597-4a23-9835-ee4f3e889185"
+
+[[env.production.kv_namespaces]]
+binding = "RATE_LIMIT_KV"
+id      = "e0f93da5591d40d3938b6c938e7c8d2a"
+
+[[env.production.queues.consumers]]
+queue             = "contact-production"
+max_batch_size    = 10
+max_batch_timeout = 30
+max_retries       = 3
+dead_letter_queue = "contact-production-dlq"
+
+[[env.production.durable_objects.bindings]]
+name       = "RATE_LIMITER"
+class_name = "RateLimiter"
+
+# Secrets (set via wrangler secret put --env production --config workers/wrangler.worker.toml):
+# POSTMARK_API_TOKEN
+# QUEUE_ENCRYPTION_KEY
+# NOTIFY_EMAIL

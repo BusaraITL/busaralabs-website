@@ -1,0 +1,102 @@
+/* ============================================================
+   BUSARA INFRASTRUCTURE & TECHNOLOGY LABS LTD
+   base.css — reset + element defaults + foundational helpers
+   Version: 1.0 | June 2026
+   Classification: Public
+   Nairobi, Kenya
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { color-scheme: light; -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: var(--weight-regular);
+  font-size: var(--type-body);
+  line-height: var(--leading-body);
+  color: var(--text-on-light);
+  background: var(--surface-page);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, p, figure, blockquote { margin: 0; }
+
+/* Headings default to display serif */
+h1, h2 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-tight);
+  letter-spacing: -0.005em;
+}
+
+h3 {
+  font-family: var(--font-body);
+  font-weight: var(--weight-semibold);
+  font-size: var(--type-h3);
+  line-height: var(--leading-snug);
+}
+
+a { color: inherit; text-decoration: none; }
+
+img, svg { display: block; max-width: 100%; }
+
+/* ---- Foundational helper classes ---- */
+
+/* Mono category label — 11px, warm gold, uppercase, tracked */
+.bl-label {
+  font-family: var(--font-mono);
+  font-weight: var(--weight-medium, 500);
+  font-size: var(--type-label);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+  color: var(--text-accent);
+}
+
+/* Structural warm-gold rule — 40px, left-aligned, precedes labels */
+.bl-rule {
+  width: var(--rule-length);
+  height: var(--rule-accent);
+  background: var(--color-warm-gold);
+  border: 0;
+  margin: 0;
+}
+
+/* Mono treatment for email + domain references */
+.bl-mono {
+  font-family: var(--font-mono);
+  font-size: var(--type-caption);
+  letter-spacing: 0.01em;
+}
+
+/* Email link — letter-spacing expands gently on hover */
+.bl-email {
+  font-family: var(--font-mono);
+  color: var(--text-accent);
+  transition: letter-spacing var(--dur-fast) var(--ease-out);
+}
+.bl-email:hover { letter-spacing: 0.06em; }
+
+/* Section content container */
+.bl-container {
+  width: 100%;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* Visible, high-contrast focus indicator */
+:where(a, button, [tabindex]):focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

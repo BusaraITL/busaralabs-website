@@ -1,0 +1,6 @@
+<svg width="160" height="180" viewBox="0 0 200 180" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="paamojaTitle">
+  <title id="paamojaTitle">Paamoja mark</title>
+  <polygon points="40,0 160,0 200,180 0,180" fill="#FFBF00"></polygon>
+  <line x1="62" y1="28" x2="62" y2="148" stroke="white" stroke-width="10" stroke-linecap="square"></line>
+  <path d="M62,28 H100 C122,28 132,42 132,58 C132,74 122,88 100,88 H62" stroke="white" stroke-width="10" fill="none" stroke-linecap="square" stroke-linejoin="miter"></path>
+</svg>

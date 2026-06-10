@@ -1,0 +1,101 @@
+<!-- ============================================================
+   BUSARA INFRASTRUCTURE & TECHNOLOGY LABS LTD
+   Site entry point — Phase A static brochure
+   Version: 1.0 | June 2026
+   Classification: Public
+   Nairobi, Kenya
+   ============================================================ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Busara Labs — Infrastructure for Trust</title>
+<meta name="description" content="Busara Labs builds foundational technology infrastructure for Africa's digital economy — starting with Nairobi.">
+<link rel="icon" href="/assets/images/logo/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="/site.webmanifest">
+<meta property="og:title" content="Busara Labs — Infrastructure for Trust">
+<meta property="og:description" content="Building foundational technology infrastructure for Africa's digital economy.">
+<meta property="og:image" content="/assets/images/og-image.png">
+<meta property="og:url" content="https://busaralabs.com">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="/assets/css/styles.css">
+<style>
+  html, body { margin: 0; background: var(--color-deep-navy); }
+  #root { min-height: 100vh; }
+  @media (max-width: 860px) {
+    .bl-nav-links, .bl-nav-email { display: none !important; }
+    .bl-nav-burger { display: flex !important; }
+    .bl-two-col, .bl-paamoja-grid, .bl-paamoja-hero { grid-template-columns: 1fr !important; }
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script>
+window.__resources = {
+  busaraMark: '/assets/images/logo/busara-labs-mark.svg',
+  paamojaMark: '/assets/images/logo/paamoja-mark.svg'
+};
+</script>
+
+<script type="text/babel" src="/src/js/modules/BusaraLabsComponents.jsx"></script>
+<script type="text/babel" src="/src/js/modules/NodeNetwork.jsx"></script>
+<script type="text/babel" src="/src/js/modules/SiteNav.jsx"></script>
+<script type="text/babel" src="/src/js/modules/SiteFooter.jsx"></script>
+<script type="text/babel" src="/src/js/modules/HomePage.jsx"></script>
+<script type="text/babel" src="/src/js/modules/AboutPage.jsx"></script>
+<script type="text/babel" src="/src/js/modules/WorkPage.jsx"></script>
+<script type="text/babel" src="/src/js/modules/PaamojaPage.jsx"></script>
+<script type="text/babel" src="/src/js/modules/LegalPages.jsx"></script>
+<script type="text/babel" src="/src/js/modules/ContactPage.jsx"></script>
+<script type="text/babel" src="/src/js/modules/CareersPage.jsx"></script>
+
+<script type="text/babel">
+  const { useState, useEffect } = React;
+
+  function App() {
+    const [page, setPage] = useState('home');
+
+    const nav = (id) => { setPage(id); window.scrollTo({ top: 0, behavior: 'auto' }); };
+
+    useEffect(() => {
+      const onPop = (e) => { if (e.state && e.state.page) setPage(e.state.page); };
+      window.addEventListener('popstate', onPop);
+      return () => window.removeEventListener('popstate', onPop);
+    }, []);
+
+    let view;
+    switch (page) {
+      case 'about':   view = <AboutPage onNav={nav} />;   break;
+      case 'work':    view = <WorkPage onNav={nav} />;    break;
+      case 'paamoja': view = <PaamojaPage onNav={nav} />; break;
+      case 'privacy': view = <PrivacyPage onNav={nav} />; break;
+      case 'terms':   view = <TermsPage onNav={nav} />;   break;
+      case '404':     view = <NotFoundPage onNav={nav} />; break;
+      case 'contact': view = <ContactPage onNav={nav} />; break;
+      case 'careers': view = <CareersPage onNav={nav} />; break;
+      default:        view = <HomePage onNav={nav} />;
+    }
+
+    const navPage = ['home', 'about', 'work', 'paamoja', 'contact'].includes(page) ? page : null;
+
+    return (
+      <div>
+        <SiteNav page={navPage} onNav={nav} />
+        <main>{view}</main>
+        <SiteFooter onNav={nav} />
+      </div>
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

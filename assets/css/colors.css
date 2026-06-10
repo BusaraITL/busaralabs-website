@@ -1,0 +1,52 @@
+/* ============================================================
+   BUSARA INFRASTRUCTURE & TECHNOLOGY LABS LTD
+   Design tokens — Color system
+   Version: 1.0 | June 2026
+   Classification: Public
+   Nairobi, Kenya
+   ============================================================ */
+
+:root {
+  color-scheme: light;
+
+  /* ---- Brand palette (base) ---- */
+  --color-deep-navy: #001A33;      /* Primary — dominates */
+  --color-warm-gold: #C9A84C;      /* Institutional accent — structural, never decorative */
+  --color-warm-white: #F8F6F1;     /* Page background — warm, not clinical */
+  --color-paamoja-gold: #FFBF00;   /* Paamoja brand only */
+  --color-charcoal: #1C1B1B;       /* Alternative dark — Paamoja hero */
+  --color-black: #111111;          /* Print / alternative dark */
+  --color-white: #FFFFFF;
+
+  /* ---- Navy tints (derived, for hovers / subtle fills) ---- */
+  --color-navy-90: #1a3047;
+  --color-navy-80: #33475c;
+  --color-navy-12: rgba(0, 26, 51, 0.12);  /* subtle borders on light */
+  --color-navy-06: rgba(0, 26, 51, 0.06);
+  --color-on-navy-12: rgba(248, 246, 241, 0.12); /* subtle borders on dark */
+  --color-on-navy-08: rgba(248, 246, 241, 0.08);
+
+  /* ---- Semantic surfaces ---- */
+  --surface-page: var(--color-warm-white);
+  --surface-dark: var(--color-deep-navy);
+  --surface-paamoja-dark: var(--color-charcoal);
+  --surface-card: var(--color-white);
+  --surface-card-dark: var(--color-navy-90);
+
+  /* ---- Semantic text ---- */
+  --text-on-light: var(--color-deep-navy);
+  --text-on-light-muted: rgba(0, 26, 51, 0.66);
+  --text-on-dark: var(--color-warm-white);
+  --text-on-dark-muted: rgba(248, 246, 241, 0.80);
+  --text-accent: var(--color-warm-gold);
+  --text-paamoja: var(--color-paamoja-gold);
+
+  /* ---- Semantic borders / dividers ---- */
+  --border-subtle: var(--color-navy-12);
+  --border-subtle-dark: var(--color-on-navy-12);
+  --border-accent: var(--color-warm-gold);
+  --border-paamoja: var(--color-paamoja-gold);
+
+  /* ---- Focus ---- */
+  --focus-ring: var(--color-warm-gold);
+}
