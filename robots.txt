@@ -1,6 +1,6 @@
 # ============================================================
 # BUSARA INFRASTRUCTURE & TECHNOLOGY LABS LTD
-# robots.txt — allow all crawlers (Phase A)
+# robots.txt — allow all crawlers
 # Version: 1.0 | June 2026 | Classification: Public | Nairobi, Kenya
 # ============================================================
 

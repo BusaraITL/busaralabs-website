@@ -1,33 +1,31 @@
-# ============================================================
-# BUSARA INFRASTRUCTURE & TECHNOLOGY LABS LTD
-# _headers — Cloudflare Pages security headers
-# Version: 1.0 | June 2026 | Classification: Public
-# Nairobi, Kenya
-# ============================================================
-
 /*
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
-  X-XSS-Protection: 1; mode=block
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=()
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
 
-/assets/*
-  Cache-Control: public, max-age=31536000, immutable
+# CSS and JS are not filename-hashed — must revalidate on every load.
+/assets/css/*
+  Cache-Control: public, max-age=0, must-revalidate
   X-Content-Type-Options: nosniff
 
+/assets/js/*
+  Cache-Control: public, max-age=0, must-revalidate
+  X-Content-Type-Options: nosniff
+
+# Fonts and images are content-stable — safe to cache hard.
 /assets/fonts/*
   Cache-Control: public, max-age=31536000, immutable
   Access-Control-Allow-Origin: https://busaralabs.com
+
+/assets/images/*
+  Cache-Control: public, max-age=604800
+  X-Content-Type-Options: nosniff
 
 /site.webmanifest
   Cache-Control: public, max-age=3600
   Content-Type: application/manifest+json
 
-/sitemap.xml
-  Cache-Control: public, max-age=86400
-  Content-Type: application/xml
-
-/robots.txt
-  Cache-Control: public, max-age=86400
+/api/*
+  Cache-Control: no-cache, no-store, must-revalidate

@@ -13,7 +13,7 @@
 /* ---- DM Serif Display ---- */
 @font-face {
   font-family: 'DM Serif Display';
-  src: url('../assets/fonts/dm-serif-display/DMSerifDisplay-Regular.woff2') format('woff2');
+  src: url('../fonts/dm-serif-display/DMSerifDisplay-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -22,35 +22,35 @@
 /* ---- Plus Jakarta Sans ---- */
 @font-face {
   font-family: 'Plus Jakarta Sans';
-  src: url('../assets/fonts/plus-jakarta-sans/PlusJakartaSans-Light.woff2') format('woff2');
+  src: url('../fonts/plus-jakarta-sans/PlusJakartaSans-Light.woff2') format('woff2');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Plus Jakarta Sans';
-  src: url('../assets/fonts/plus-jakarta-sans/PlusJakartaSans-Regular.woff2') format('woff2');
+  src: url('../fonts/plus-jakarta-sans/PlusJakartaSans-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Plus Jakarta Sans';
-  src: url('../assets/fonts/plus-jakarta-sans/PlusJakartaSans-Medium.woff2') format('woff2');
+  src: url('../fonts/plus-jakarta-sans/PlusJakartaSans-Medium.woff2') format('woff2');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Plus Jakarta Sans';
-  src: url('../assets/fonts/plus-jakarta-sans/PlusJakartaSans-SemiBold.woff2') format('woff2');
+  src: url('../fonts/plus-jakarta-sans/PlusJakartaSans-SemiBold.woff2') format('woff2');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Plus Jakarta Sans';
-  src: url('../assets/fonts/plus-jakarta-sans/PlusJakartaSans-ExtraBold.woff2') format('woff2');
+  src: url('../fonts/plus-jakarta-sans/PlusJakartaSans-ExtraBold.woff2') format('woff2');
   font-weight: 800;
   font-style: normal;
   font-display: swap;
@@ -59,21 +59,21 @@
 /* ---- IBM Plex Mono ---- */
 @font-face {
   font-family: 'IBM Plex Mono';
-  src: url('../assets/fonts/ibm-plex-mono/IBMPlexMono-Light.woff2') format('woff2');
+  src: url('../fonts/ibm-plex-mono/IBMPlexMono-Light.woff2') format('woff2');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'IBM Plex Mono';
-  src: url('../assets/fonts/ibm-plex-mono/IBMPlexMono-Regular.woff2') format('woff2');
+  src: url('../fonts/ibm-plex-mono/IBMPlexMono-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'IBM Plex Mono';
-  src: url('../assets/fonts/ibm-plex-mono/IBMPlexMono-Medium.woff2') format('woff2');
+  src: url('../fonts/ibm-plex-mono/IBMPlexMono-Medium.woff2') format('woff2');
   font-weight: 500;
   font-style: normal;
   font-display: swap;

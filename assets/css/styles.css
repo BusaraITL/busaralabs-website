@@ -4,7 +4,7 @@
    Version: 1.0 | June 2026
    Classification: Public
    Nairobi, Kenya
-   Consumers link THIS file. Keep as @import lines only.
+   Every page links THIS file. Keep it as @import lines only.
    ============================================================ */
 
 @import url('fonts.css');
@@ -12,3 +12,4 @@
 @import url('typography.css');
 @import url('spacing.css');
 @import url('base.css');
+@import url('components.css');

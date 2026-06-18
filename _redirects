@@ -1,9 +1,8 @@
-# ============================================================
-# BUSARA INFRASTRUCTURE & TECHNOLOGY LABS LTD
-# _redirects — Cloudflare Pages SPA fallback
-# Version: 1.0 | June 2026 | Classification: Public
-# All paths serve index.html — React router handles routing.
-# www redirect handled at Cloudflare DNS level.
-# ============================================================
-
-/*    /index.html    200
+# Cloudflare Pages serves clean URLs automatically: each *.html file is served
+# at its extensionless path (/work serves work.html) and the .html form
+# 308-redirects to it. Unmatched paths fall through to /404.html with a 404
+# status. No explicit rewrite rules are needed here — adding them creates a
+# redirect loop against Pages' built-in canonicalization.
+#
+# Add genuine redirects (renamed/retired URLs) below as needed.
+/services    /work    301

@@ -1,6 +1,6 @@
 <!-- ============================================================
    BUSARA INFRASTRUCTURE & TECHNOLOGY LABS LTD
-   Site entry point — Phase A static brochure
+   index.html — Home page (full static HTML)
    Version: 1.0 | June 2026
    Classification: Public
    Nairobi, Kenya
@@ -13,89 +13,204 @@
 <meta name="color-scheme" content="light">
 <title>Busara Labs — Infrastructure for Trust</title>
 <meta name="description" content="Busara Labs builds foundational technology infrastructure for Africa's digital economy — starting with Nairobi.">
-<link rel="icon" href="/assets/images/logo/favicon.svg" type="image/svg+xml">
-<link rel="manifest" href="/site.webmanifest">
 <meta property="og:title" content="Busara Labs — Infrastructure for Trust">
-<meta property="og:description" content="Building foundational technology infrastructure for Africa's digital economy.">
-<meta property="og:image" content="/assets/images/og-image.png">
-<meta property="og:url" content="https://busaralabs.com">
+<meta property="og:description" content="Busara Labs builds foundational technology infrastructure for Africa's digital economy — starting with Nairobi.">
+<meta property="og:image" content="https://busaralabs.com/assets/images/og-image.png">
+<meta property="og:url" content="https://busaralabs.com/">
 <meta property="og:type" content="website">
-<link rel="stylesheet" href="/assets/css/styles.css">
-<style>
-  html, body { margin: 0; background: var(--color-deep-navy); }
-  #root { min-height: 100vh; }
-  @media (max-width: 860px) {
-    .bl-nav-links, .bl-nav-email { display: none !important; }
-    .bl-nav-burger { display: flex !important; }
-    .bl-two-col, .bl-paamoja-grid, .bl-paamoja-hero { grid-template-columns: 1fr !important; }
-  }
-</style>
+<link rel="canonical" href="https://busaralabs.com/">
+<link rel="icon" href="assets/images/logo/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="site.webmanifest">
+<link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
-<div id="root"></div>
 
-<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<!-- ============ SITE NAV (identical on every page) ============ -->
+<nav class="bl-nav" aria-label="Primary" data-screen-label="Site navigation">
+  <div class="bl-nav-inner">
+    <a href="index.html" class="bl-brand" aria-label="Busara Labs — home">
+      <img src="assets/images/logo/busara-labs-mark.svg" alt="" width="34" height="38">
+      <span class="bl-brand__text">
+        <span class="bl-brand__name">Busara&nbsp;Labs</span>
+        <span class="bl-brand__tag">Infrastructure for Trust</span>
+      </span>
+    </a>
+    <div class="bl-nav-links">
+      <a href="index.html" class="bl-nav-link bl-nav-link--active">Home</a>
+      <a href="about.html" class="bl-nav-link">About</a>
+      <a href="work.html" class="bl-nav-link">Our Work</a>
+      <a href="paamoja.html" class="bl-nav-link">Paamoja</a>
+      <a href="contact.html" class="bl-nav-link">Contact</a>
+    </div>
+    <div class="bl-nav-email">
+      <a href="mailto:hello@busaralabs.com" class="bl-email-link">hello@busaralabs.com</a>
+    </div>
+    <button class="bl-nav-burger" type="button" aria-label="Open menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+  <div class="bl-mobile-overlay">
+    <div class="bl-mobile-overlay__top">
+      <button class="bl-mobile-close" type="button" aria-label="Close menu">×</button>
+    </div>
+    <div class="bl-mobile-links">
+      <a href="index.html" class="bl-mobile-link bl-mobile-link--active">Home</a>
+      <a href="about.html" class="bl-mobile-link">About</a>
+      <a href="work.html" class="bl-mobile-link">Our Work</a>
+      <a href="paamoja.html" class="bl-mobile-link">Paamoja</a>
+      <a href="contact.html" class="bl-mobile-link">Contact</a>
+    </div>
+    <div class="bl-mobile-foot">
+      <a href="mailto:hello@busaralabs.com" class="bl-email-link bl-email-link--md">hello@busaralabs.com</a>
+    </div>
+  </div>
+</nav>
 
-<script>
-window.__resources = {
-  busaraMark: '/assets/images/logo/busara-labs-mark.svg',
-  paamojaMark: '/assets/images/logo/paamoja-mark.svg'
-};
-</script>
-
-<script type="text/babel" src="/src/js/modules/BusaraLabsComponents.jsx"></script>
-<script type="text/babel" src="/src/js/modules/NodeNetwork.jsx"></script>
-<script type="text/babel" src="/src/js/modules/SiteNav.jsx"></script>
-<script type="text/babel" src="/src/js/modules/SiteFooter.jsx"></script>
-<script type="text/babel" src="/src/js/modules/HomePage.jsx"></script>
-<script type="text/babel" src="/src/js/modules/AboutPage.jsx"></script>
-<script type="text/babel" src="/src/js/modules/WorkPage.jsx"></script>
-<script type="text/babel" src="/src/js/modules/PaamojaPage.jsx"></script>
-<script type="text/babel" src="/src/js/modules/LegalPages.jsx"></script>
-<script type="text/babel" src="/src/js/modules/ContactPage.jsx"></script>
-<script type="text/babel" src="/src/js/modules/CareersPage.jsx"></script>
-
-<script type="text/babel">
-  const { useState, useEffect } = React;
-
-  function App() {
-    const [page, setPage] = useState('home');
-
-    const nav = (id) => { setPage(id); window.scrollTo({ top: 0, behavior: 'auto' }); };
-
-    useEffect(() => {
-      const onPop = (e) => { if (e.state && e.state.page) setPage(e.state.page); };
-      window.addEventListener('popstate', onPop);
-      return () => window.removeEventListener('popstate', onPop);
-    }, []);
-
-    let view;
-    switch (page) {
-      case 'about':   view = <AboutPage onNav={nav} />;   break;
-      case 'work':    view = <WorkPage onNav={nav} />;    break;
-      case 'paamoja': view = <PaamojaPage onNav={nav} />; break;
-      case 'privacy': view = <PrivacyPage onNav={nav} />; break;
-      case 'terms':   view = <TermsPage onNav={nav} />;   break;
-      case '404':     view = <NotFoundPage onNav={nav} />; break;
-      case 'contact': view = <ContactPage onNav={nav} />; break;
-      case 'careers': view = <CareersPage onNav={nav} />; break;
-      default:        view = <HomePage onNav={nav} />;
-    }
-
-    const navPage = ['home', 'about', 'work', 'paamoja', 'contact'].includes(page) ? page : null;
-
-    return (
-      <div>
-        <SiteNav page={navPage} onNav={nav} />
-        <main>{view}</main>
-        <SiteFooter onNav={nav} />
+<main>
+  <!-- ============ HERO ============ -->
+  <section class="bl-hero ambient-network" data-screen-label="Hero">
+    <div class="bl-hero__inner">
+      <h1 class="bl-hero__title" data-enter style="--enter-delay:60ms">Infrastructure for Africa's Digital Economy</h1>
+      <p class="bl-hero__lede" data-enter style="--enter-delay:160ms">For most people in Africa's economy, the digital systems they are asked to trust were never built for the realities they live. Busara Labs exists to change that.</p>
+      <div class="bl-hero__cta" data-enter style="--enter-delay:260ms">
+        <a href="mailto:hello@busaralabs.com" class="bl-email-link bl-email-link--md">hello@busaralabs.com</a>
       </div>
-    );
-  }
+    </div>
+  </section>
 
-  ReactDOM.createRoot(document.getElementById('root')).render(<App />);
-</script>
+  <!-- ============ THE REALITY WE SEE ============ -->
+  <section class="bl-bg-white bl-section-pad" data-screen-label="The reality we see">
+    <div class="bl-wrap">
+      <div class="bl-section-header">
+        <hr class="bl-section-header__rule">
+        <span class="bl-section-header__label">The Reality We See</span>
+        <h2 class="bl-section-header__headline">Start with the problems, not the products.</h2>
+      </div>
+      <p class="bl-prose bl-mt-28 bl-mw-60">Before any solution, there are problems worth understanding. These are the realities Busara Labs chooses to work on.</p>
+      <div class="bl-infra">
+        <div class="bl-infra__row"><span class="bl-infra__term">Disconnected institutions</span><span class="bl-infra__gloss">Systems that should work together operate in isolation.</span></div>
+        <div class="bl-infra__row"><span class="bl-infra__term">Low-trust systems</span><span class="bl-infra__gloss">Exchanges that stall because no one can be sure of the other side.</span></div>
+        <div class="bl-infra__row"><span class="bl-infra__term">Fragmented digital experiences</span><span class="bl-infra__gloss">Commerce, payment and delivery split across tools that don't speak.</span></div>
+        <div class="bl-infra__row"><span class="bl-infra__term">Barriers to participation</span><span class="bl-infra__gloss">People shut out of the digital economy by design, not by choice.</span></div>
+        <div class="bl-infra__row"><span class="bl-infra__term">Symptoms, not causes</span><span class="bl-infra__gloss">Technology that treats the visible symptom and leaves the cause intact.</span></div>
+        <div class="bl-infra__row"><span class="bl-infra__term">Imported solutions</span><span class="bl-infra__gloss">Foreign answers applied to local problems they were never built to understand.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ A DIFFERENT RESPONSE ============ -->
+  <section class="bl-bg-navy bl-section-pad ambient-network" data-screen-label="A different response">
+    <div class="bl-wrap bl-two-col">
+      <div class="bl-section-header bl-section-header--dark">
+        <hr class="bl-section-header__rule">
+        <span class="bl-section-header__label">A Different Response</span>
+        <h2 class="bl-section-header__headline">We don't begin with technology.</h2>
+      </div>
+      <div>
+        <p class="bl-prose-dark bl-mw-52">Most responses to these problems begin with a technology and look for somewhere to apply it. Busara Labs begins the other way around — with people, and with the problem itself. Why we work this way is the subject of the About page.</p>
+        <div class="bl-mt-28">
+          <a href="about.html" class="bl-textlink bl-textlink--gold">Read how we think →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FROM OBSERVATION TO ACTION ============ -->
+  <section class="bl-bg-white bl-section-pad" data-screen-label="From observation to action">
+    <div class="bl-wrap">
+      <div class="bl-section-header">
+        <hr class="bl-section-header__rule">
+        <span class="bl-section-header__label">From Observation to Action</span>
+        <h2 class="bl-section-header__headline">A disciplined path, every time.</h2>
+      </div>
+      <p class="bl-prose bl-mt-28 bl-mw-60">When we encounter a meaningful problem, our first response is never immediate implementation. Every initiative follows a disciplined path from observation to trusted execution.</p>
+      <p class="bl-vx-hint bl-mt-28">Select a stage to follow the path — each one prepares the next</p>
+      <div class="bl-vx-host bl-mt-24" data-vx="methodology">
+        <div class="bl-vx-fallback">
+          <p>Every initiative moves from observation to trusted execution — Observe, Listen, Research, Validate, Design the Institution, and Build What Can Be Trusted. Technology is the final stage, never the first. Enable JavaScript to follow the path.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CURRENT INITIATIVE — PAAMOJA ============ -->
+  <section class="bl-bg-charcoal bl-section-pad" data-screen-label="Current initiative — Paamoja">
+    <div class="bl-wrap bl-paamoja-grid">
+      <div>
+        <div class="bl-paamoja-brand">
+          <img src="assets/images/logo/paamoja-mark.svg" alt="Paamoja" width="44" height="50">
+          <span class="bl-paamoja-brand__name">Paamoja</span>
+        </div>
+        <p class="bl-paamoja-eyebrow">Current Initiative</p>
+        <h2 class="bl-paamoja-h2">Paamoja</h2>
+        <p class="bl-prose-dark bl-mw-46">Our first public initiative — currently progressing through this path, in Nairobi. There is nothing to sell here yet; there is a process to follow, documented as it is built.</p>
+        <div class="bl-paamoja-actions">
+          <a href="paamoja.html" class="bl-textlink">Explore the Paamoja initiative →</a>
+        </div>
+      </div>
+      <div>
+        <a href="https://paamoja.com" target="_blank" rel="noopener noreferrer" class="bl-coming-soon bl-coming-soon--paamoja">
+          <span class="bl-coming-soon__row">
+            <span class="bl-coming-soon__domain">paamoja.com</span>
+            <span class="bl-coming-soon__arrow" aria-hidden="true">↗</span>
+          </span>
+          <p class="bl-coming-soon__note">Coming Soon — join the waitlist for merchants, couriers, and buyers.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CLOSING ============ -->
+  <section class="bl-bg-navy bl-section-pad ambient-network" data-screen-label="Closing">
+    <div class="bl-wrap">
+      <figure class="bl-pull-quote bl-pull-quote--dark">
+        <hr class="bl-pull-quote__rule">
+        <blockquote class="bl-pull-quote__text">From one city to one continent.</blockquote>
+      </figure>
+      <p class="bl-prose-dark bl-mw-60 bl-mt-24">This is the institution being built to get there — by understanding problems before solving them. There is more to see.</p>
+      <div class="bl-paamoja-actions">
+        <a href="about.html" class="bl-textlink bl-textlink--gold">Why we think differently →</a>
+        <a href="work.html" class="bl-textlink bl-textlink--gold">Where we apply it →</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ SITE FOOTER (identical on every page) ============ -->
+<footer class="bl-footer" data-screen-label="Site footer">
+  <div class="bl-footer__inner">
+    <div class="bl-footer__cols">
+      <div>
+        <div class="bl-footer__col-title">Company</div>
+        <p class="bl-footer__line">Busara Infrastructure &amp; Technology Labs Ltd</p>
+        <p class="bl-footer__line--mb">Nairobi, Kenya</p>
+        <a href="research-journal.html" class="bl-footer__legal-link">Research Journal</a>
+      </div>
+      <div>
+        <div class="bl-footer__col-title">Contact</div>
+        <p class="bl-footer__line">Partnerships &amp; enquiries</p>
+        <p class="bl-footer__line--mb"><a href="mailto:hello@busaralabs.com" class="bl-email-link">hello@busaralabs.com</a></p>
+        <p class="bl-footer__line">Data protection</p>
+        <p><a href="mailto:compliance@busaralabs.com" class="bl-email-link">compliance@busaralabs.com</a></p>
+      </div>
+      <div>
+        <div class="bl-footer__col-title">Legal</div>
+        <a href="privacy-policy.html" class="bl-footer__legal-link">Privacy Policy</a>
+        <a href="terms-of-service.html" class="bl-footer__legal-link">Terms &amp; Conditions</a>
+        <a href="cookie-policy.html" class="bl-footer__legal-link">Cookie Policy</a>
+        <a href="disclaimer.html" class="bl-footer__legal-link">Disclaimer</a>
+        <a href="contact.html" class="bl-footer__legal-link">Contact</a>
+      </div>
+    </div>
+    <div class="bl-footer__bottom">
+      <span class="bl-footer__fine">© 2026 Busara Infrastructure &amp; Technology Labs Ltd. All rights reserved.</span>
+      <span class="bl-footer__fine">Registered in Kenya · Operating under Kenya Data Protection Act 2019.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/data-methodology.js" defer></script>
+<script src="assets/js/main.js" defer></script>
 </body>
 </html>

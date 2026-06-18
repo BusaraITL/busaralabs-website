@@ -43,5 +43,6 @@
   /* ---- Motion ---- */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1); /* @kind other */
   --dur-fast: 180ms; /* @kind other */
+  --dur-base: 280ms; /* @kind other */
   --dur-reveal: 420ms; /* @kind other */
 }
