@@ -894,6 +894,20 @@
      first paint, staggered. Gated on .bl-js so a no-JS load
      shows everything; skipped under prefers-reduced-motion.
      -------------------------------------------------------- */
+  /* --------------------------------------------------------
+     Reads data-enter-delay (a plain HTML attribute, unaffected
+     by CSP style-src) and sets --enter-delay via the DOM API.
+     setProperty() is a script action, not an inline style
+     attribute, so it is not blocked by style-src 'self'.
+     -------------------------------------------------------- */
+  function initEnterDelays() {
+    var els = document.querySelectorAll('[data-enter-delay]');
+    els.forEach(function (el) {
+      var ms = el.getAttribute('data-enter-delay');
+      el.style.setProperty('--enter-delay', ms + 'ms');
+    });
+  }
+
   function initEntrance() {
     var root = document.documentElement;
     if (prefersReduced) {
@@ -974,6 +988,7 @@
     initEcosystem();
     initAutoReveal();
     initScrollReveal();
+    initEnterDelays();
     initEntrance();
   }
 
