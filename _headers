@@ -4,6 +4,7 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=()
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  Content-Security-Policy: default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; font-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
 
 # CSS and JS are not filename-hashed — must revalidate on every load.
 /assets/css/*
@@ -17,7 +18,7 @@
 # Fonts and images are content-stable — safe to cache hard.
 /assets/fonts/*
   Cache-Control: public, max-age=31536000, immutable
-  Access-Control-Allow-Origin: https://busaralabs.com
+  Access-Control-Allow-Origin: *
 
 /assets/images/*
   Cache-Control: public, max-age=604800

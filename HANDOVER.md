@@ -47,6 +47,7 @@ busaralabs-website/
 ├── paamoja.html            # Paamoja (flagship initiative)
 ├── research-journal.html   # Research Journal
 ├── contact.html            # Contact
+├── careers.html            # Careers (not in primary nav — footer + Contact only)
 ├── privacy-policy.html     # Legal
 ├── terms-of-service.html   # Legal
 ├── cookie-policy.html      # Legal
@@ -71,6 +72,7 @@ busaralabs-website/
 │   │   ├── data-infrastructure.js# Work  → window.BUSARA_INFRASTRUCTURE
 │   │   ├── journey-data.js       # Paamoja → window.BUSARA_JOURNEY
 │   │   ├── data-journal.js       # Research Journal → window.BUSARA_JOURNAL
+│   │   ├── data-values.js        # Careers → window.BUSARA_VALUES
 │   │   └── data-social.js        # Contact → window.BUSARA_SOCIAL
 │   │
 │   ├── fonts/               # Self-hosted WOFF2, subsetted to Latin
@@ -185,6 +187,7 @@ Each interactive section is **data‑driven**. The page loads only the one or tw
 | Our Work | `data-infrastructure.js` | `BUSARA_INFRASTRUCTURE` | Infrastructure‑domains explorer |
 | Paamoja | `journey-data.js` | `BUSARA_JOURNEY` | Institutional development journey |
 | Research Journal | `data-journal.js` | `BUSARA_JOURNAL` | Journal entries |
+| Careers | `data-values.js` | `BUSARA_VALUES` | "What We Value" explorer |
 | Contact | `data-social.js` | `BUSARA_SOCIAL` | Outbound social links |
 
 Each is a plain array of objects assigned to a `window.BUSARA_*` global with a documented shape (see the header comment in each file). **To change copy in an interactive section, edit ONLY its data file** — no HTML or `main.js` change required.
@@ -249,11 +252,16 @@ Intended narrative flow (each page answers a different question and points to th
 | **Our Work** | The enduring infrastructure domains | Domains explorer (relationship highlighting) |
 | **Paamoja** | The flagship initiative as a public case study | Journey explorer, ecosystem pipeline |
 | **Research Journal** | Public record of institutional learning | Journal entries (long‑form) |
+| **Careers** | Who should build with Busara Labs (not a job board) | "What We Value" explorer, disciplines grid |
 | **Contact** | Ways to take part | Routed mailto categories, social links |
 | **Legal ×4** | Privacy / Terms / Cookie / Disclaimer | Static, shared structured layout |
 | **404** | Error | Static, `noindex` |
 
-The footer is **identical on every page** (Company / Contact / Legal columns + fine print) and concludes every page consistently.
+The footer is **identical on every page**: a single unified grid with five columns — **Organisation** (Busara Labs, registered entity, Nairobi, and the enabled social links rendered as monochrome SVG icons from `BUSARA_SOCIAL` via `[data-social-footer]`), **Company** (About · Careers · Contact), **Initiatives** (Our Work · Paamoja), **Knowledge** (Research Journal), **Legal** (Privacy · Terms · Cookie · Disclaimer) — above a fine-print bottom. Contact emails live on the Contact page only (not duplicated in the footer). It is one cohesive conclusion, not stacked sections. `data-social.js` is loaded on every page so the footer socials render site-wide.
+
+> **Social icons** are official single-path brand glyphs stored locally in a `BL_SOCIAL_ICONS` map in `main.js` (no icon library, no external request), rendered inline with `fill="currentColor"` so they stay monochrome and inherit the footer text colour + hover. They appear icon-only in the footer (44px touch target, `aria-label`) and as icon + name on the Contact "Follow" list. To enable a future platform (Facebook / Instagram / YouTube glyphs are already in the map), just set `enabled:true` + its `url` in `data-social.js` — no markup or layout change.
+
+> **Careers is intentionally NOT in the primary nav** (the company is not actively recruiting). It is discoverable via the footer (Company column), a "Building With Us" entry on Contact, and may later be promoted into the primary nav. Narrative chapter: *Careers — The People*.
 
 ---
 
@@ -318,7 +326,7 @@ Everything else is fluid via `clamp()` on type, gutters, and section padding —
 
 ## 15. Known caveats & pre‑production checklist
 
-- **The nav/footer are duplicated in every HTML file** (no templating, by design). Any header/footer/nav change must be applied to all 11 pages. This is the single biggest maintenance cost; if the page count grows, consider a tiny build‑time include step — but only if it doesn't reintroduce a toolchain you have to maintain.
+- **The nav/footer are duplicated in every HTML file** (no templating, by design). Any header/footer/nav change must be applied to all 12 pages. This is the single biggest maintenance cost; if the page count grows, consider a tiny build‑time include step — but only if it doesn't reintroduce a toolchain you have to maintain.
 - **Cloudflare‑specific** `_redirects` / `_headers` — translate if you move hosts.
 - **Fonts are subsetted to Latin.** If you add non‑Latin copy (e.g. extended Swahili glyphs beyond Latin), re‑subset and re‑export the WOFF2s.
 - **Analytics** (Cloudflare Web Analytics) must be enabled in the Cloudflare dashboard; it's cookieless and already disclosed in the cookie/privacy pages.
@@ -331,6 +339,11 @@ Everything else is fluid via `clamp()` on type, gutters, and section padding —
 1. **Editorial/integration pass:** fixed a literal `\u2014` rendering as text on Paamoja; standardized British terminology ("enquiries" for contact contexts, "inquiry" reserved for investigation); brought `terms-of-service.html` into the shared structured legal‑page layout; pruned dead CSS left over from an earlier JSX→HTML migration (`.bl-badge`, `.bl-mission`, `.bl-inquiry-label`, unused two‑col/email/header variants, `.bl-legal-pad-lg`, `.bl-section-pad-bt`, etc.) and the orphaned `.bl-mission` JS selector.
 2. **Section‑spacing system fix:** corrected `.bl-section-pad-b` misuse on Research Journal, Contact, and Paamoja where sections following a different background had no top padding (content clipped at the color seam); reframed the Research Journal entries to match the About page (added "The Record" header, gutter‑aligned the reading column). Codified the rule in §4.4.
 3. **Mobile header hardening:** fixed the backdrop‑filter containing‑block bug that clipped the open menu after scrolling; upgraded the scroll lock to the iOS‑safe pin‑and‑restore technique with `overscroll-behavior: contain`.
+4. **Careers page added (12th page):** new `careers.html` answering "who should build with Busara Labs" — hero, Why Build With Us, How We Grow, Areas We Expect to Grow (hairline disciplines grid on navy), Current Opportunities ("no open positions, by design"), What We Value (new `VerticalExplorer` driven by `data-values.js` → `BUSARA_VALUES`), and a closing invitation to Contact. Reuses every existing component, token and motion pattern; no new dependencies. **Not in primary nav.**
+5. **Footer regrouped (all 12 pages):** from Company/Contact/Legal to an identity row + four columns — Company (About · Careers · Contact), Initiatives (Our Work · Paamoja), Knowledge (Research Journal), Legal. Added `.bl-footer__brand-row` / `.bl-footer__contacts` styles. Careers also surfaced as a "Building With Us" entry on Contact, and registered in `sitemap.xml` (careers uses `.html`, no `_redirects` entry needed).
+6. **Footer consolidation:** the identity brand-row read as a second stacked footer (a full-width divider split it from the nav columns). Collapsed it into a single five-column grid — **Organisation** (identity + both contact emails + enabled social links) · Company · Initiatives · Knowledge · Legal — over one fine-print bottom. Social links now render site-wide from `BUSARA_SOCIAL` into `[data-social-footer]` via `initFooterSocial()`; `data-social.js` is loaded on every page. `.bl-footer__cols` switched from `auto-fit` to an explicit `1.7fr 1fr 1fr 1fr 1fr` template with 860/560/380px collapses; removed the now-unused `.bl-footer__brand-row`/`.bl-footer__contacts` rules. Added Legal & Regulatory and Finance & Accounting to the Careers disciplines (10 → 12, filling the grid evenly).
+7. **Footer contact de-duplication:** removed the General enquiries / Data protection email blocks from the footer Organisation column on all 12 pages (they live on the Contact page only); pruned the now-dead `.bl-footer__contact*` CSS.
+8. **Social icons:** replaced the footer text social links with official single-path brand glyphs stored locally in a `BL_SOCIAL_ICONS` map in `main.js` (WhatsApp / LinkedIn / X enabled; Facebook / Instagram / YouTube pre-loaded, disabled). Rendered inline with `fill="currentColor"` — monochrome, neutral, equal weight, smooth hover, `:focus-visible` ring, 44px touch targets, `aria-label` per icon, SVGs `aria-hidden`. Contact "Follow" list now shows icon + name. No icon library, no external request.
 
 ---
 
