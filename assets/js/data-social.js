@@ -12,9 +12,11 @@
    Version: 1.0 | June 2026 · Classification: Public · Nairobi
    ============================================================ */
 window.BUSARA_SOCIAL = [
-  { name: 'WhatsApp', handle: 'Message us',            url: 'https://wa.me/',                                  enabled: true },
-  { name: 'LinkedIn', handle: '/company/busara-labs',  url: 'https://www.linkedin.com/company/busara-labs',    enabled: true },
-  { name: 'X',        handle: '@busaralabs',           url: 'https://x.com/busaralabs',                        enabled: true },
+  { name: 'WhatsApp', handle: 'Message us',            url: 'https://wa.me/254107911460',                     enabled: true },
+  /* Pending: account not yet created. Enable once live, confirm handle. */
+  { name: 'LinkedIn', handle: '/company/busara-labs',  url: 'https://www.linkedin.com/company/busara-labs',    enabled: false },
+  /* Pending: account not yet created. Enable once live, confirm handle. */
+  { name: 'X',        handle: '@busaralabs',           url: 'https://x.com/busaralabs',                        enabled: false },
 
   /* Enabled once official accounts exist — no redesign needed. */
   { name: 'Facebook',  handle: '', url: '', enabled: false },
