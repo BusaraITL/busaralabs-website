@@ -4,6 +4,7 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=()
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  Cache-Control: no-store
 
 # CSS and JS are not filename-hashed — must revalidate on every load.
 /assets/css/*
