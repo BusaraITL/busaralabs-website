@@ -1,7 +1,16 @@
-<svg width="110" height="124" viewBox="0 0 200 180" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="busaraTitle">
-  <title id="busaraTitle">Busara Labs mark</title>
-  <polygon points="0,180 200,180 160,0 40,0" fill="#F8F6F1"></polygon>
-  <line x1="68" y1="32" x2="68" y2="148" stroke="#001A33" stroke-width="12" stroke-linecap="square"></line>
-  <path d="M68,32 H106 C124,32 134,44 134,58 C134,72 124,82 106,82 H68" stroke="#001A33" stroke-width="12" fill="none" stroke-linecap="square" stroke-linejoin="miter"></path>
-  <path d="M68,82 H110 C130,82 142,95 142,111 C142,127 130,148 110,148 H68" stroke="#001A33" stroke-width="12" fill="none" stroke-linecap="square" stroke-linejoin="miter"></path>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- ============================================================
+       BUSARA LABS — Primary Mark (for light/white backgrounds)
+       Inverted trapezoid: wide top (140px) / narrow base (70px)
+       Fill: Deep Navy #001A33 | Letterform: Warm Gold #C9A84C
+       Version: 2.0 (corrected geometry) | June 2026
+       ============================================================ -->
+  <polygon points="30,40 170,40 135,160 65,160" fill="#001A33"/>
+  <text x="100" y="93.3"
+        font-family="'DM Serif Display', Georgia, 'Times New Roman', serif"
+        font-size="100"
+        font-weight="400"
+        fill="#C9A84C"
+        text-anchor="middle"
+        dominant-baseline="central">B</text>
 </svg>

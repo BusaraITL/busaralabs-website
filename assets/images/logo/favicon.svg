@@ -1,7 +1,16 @@
-<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="favTitle">
-  <title id="favTitle">Busara Labs favicon</title>
-  <polygon points="0,32 32,32 26,0 6,0" fill="#F8F6F1"></polygon>
-  <line x1="10" y1="5" x2="10" y2="27" stroke="#001A33" stroke-width="2.5" stroke-linecap="square"></line>
-  <path d="M10,5 H17 C21,5 23,8 23,11 C23,14 21,17 17,17 H10" stroke="#001A33" stroke-width="2.5" fill="none" stroke-linecap="square"></path>
-  <path d="M10,17 H18 C22,17 24,20 24,23 C24,26 22,27 18,27 H10" stroke="#001A33" stroke-width="2.5" fill="none" stroke-linecap="square"></path>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- ============================================================
+       BUSARA LABS — Favicon
+       Same corrected geometry; bolder sans-serif B for legibility
+       at 16–32px (serif strokes disappear at favicon scale)
+       Version: 2.0 | June 2026
+       ============================================================ -->
+  <polygon points="30,40 170,40 135,160 65,160" fill="#C9A84C"/>
+  <text x="100" y="93.3"
+        font-family="'Plus Jakarta Sans', Arial, sans-serif"
+        font-size="92"
+        font-weight="800"
+        fill="#001A33"
+        text-anchor="middle"
+        dominant-baseline="central">B</text>
 </svg>
