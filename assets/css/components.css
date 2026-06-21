@@ -181,6 +181,16 @@ html, body { background: var(--color-deep-navy); }
   letter-spacing: 0.2em;
   color: var(--color-warm-gold);
 }
+/* The new trapezoid mark has more internal whitespace than the old
+   thick-stroke version, reading as visually smaller at the same
+   pixel box despite identical width/height. Bumped on desktop only
+   — mobile sizing already reads correctly at the base 34x38. */
+@media (min-width: 861px) {
+  .bl-brand img {
+    width: 44px;
+    height: 49px;
+  }
+}
 
 .bl-nav-links {
   display: flex;
