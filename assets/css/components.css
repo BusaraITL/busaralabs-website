@@ -730,6 +730,28 @@ html, body { background: var(--color-deep-navy); }
   color: var(--text-on-dark-muted);
   max-width: 56ch;
 }
+/* The Doctrine's foundation statement — deliberately larger than the
+   page title it precedes, so it reads as load-bearing, not a quote
+   among others. Distinct from .bl-pull-quote on purpose. */
+.bl-foundation-statement {
+  margin-top: 28px;
+  font-family: var(--font-display);
+  font-size: var(--type-hero);
+  line-height: 1.12;
+  color: var(--color-warm-gold);
+  max-width: 22ch;
+}
+.bl-foundation-statement__caption {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(248, 246, 241, 0.18);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-on-dark-muted);
+  max-width: 40ch;
+}
 
 /* ============================================================
    404
