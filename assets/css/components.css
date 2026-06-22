@@ -741,6 +741,9 @@ html, body { background: var(--color-deep-navy); }
   color: var(--color-warm-gold);
   max-width: 22ch;
 }
+.bl-foundation-statement span {
+  display: inline-block;
+}
 .bl-foundation-statement__caption {
   margin-top: 18px;
   padding-top: 18px;
