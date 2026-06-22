@@ -617,11 +617,12 @@
      arrows move between stages. Reduced motion: no rotation, no
      auto-cycle — manual interaction and hierarchy are preserved.
      -------------------------------------------------------- */
-  function initOrbit() {
-    var host = document.querySelector('[data-orbit="thinking"]');
+  function Orbit(host, data, config) {
     if (!host) return;
-    var data = window.BUSARA_THINKING;
     if (!Array.isArray(data) || !data.length) return;
+    config = config || {};
+    var ariaLabel = config.ariaLabel || "Orbit — current stage";
+    var eyebrowOf = config.eyebrow || function (item) { return "Stage " + item.id; };
     var n = data.length;
 
     host.innerHTML = '';
@@ -640,7 +641,7 @@
     var panel = el('aside', 'bl-orbit__panel');
     panel.setAttribute('role', 'tabpanel');
     panel.setAttribute('aria-live', 'polite');
-    panel.setAttribute('aria-label', 'How we think — current stage');
+    panel.setAttribute('aria-label', ariaLabel);
 
     root.appendChild(stage);
     root.appendChild(panel);
@@ -682,7 +683,7 @@
 
     function renderPanel(item) {
       panel.innerHTML = '';
-      panel.appendChild(el('p', 'bl-vx__panel-eyebrow', 'Stage ' + item.id + ' \u00B7 How we think'));
+      panel.appendChild(el('p', 'bl-vx__panel-eyebrow', eyebrowOf(item)));
       panel.appendChild(el('h3', 'bl-vx__panel-title', item.title));
       panel.appendChild(el('p', 'bl-vx__panel-role', item.role));
       panel.appendChild(el('p', 'bl-vx__purpose', item.purpose));
@@ -1003,7 +1004,8 @@
     initMobileMenu();
     initAmbientNetwork();
     initVerticalExplorers();
-    initOrbit();
+    Orbit(document.querySelector('[data-orbit="thinking"]'), window.BUSARA_THINKING, { ariaLabel: 'How we think — current stage', eyebrow: function (item) { return 'Stage ' + item.id + ' · How we think'; } });
+    Orbit(document.querySelector('[data-orbit="doctrine-chain"]'), window.BUSARA_DOCTRINE_CHAIN, { ariaLabel: 'Layer 3 — the Design Philosophy chain', eyebrow: function (item) { return 'Stage ' + item.id + ' · Layer 3'; } });
     initSocial();
     initFooterSocial();
     initJournal();
