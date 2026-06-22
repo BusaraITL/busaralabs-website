@@ -1329,6 +1329,15 @@ html, body { background: var(--color-deep-navy); }
   opacity: 0.85;
   margin: 8px 0 0;
 }
+.bl-vx__panel-virtue {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--vx-accent);
+  opacity: 0.6;
+  margin: 4px 0 0;
+}
 .bl-vx__body { margin-top: 2px; }
 .bl-vx__desc {
   font-size: 16px;

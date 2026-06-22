@@ -443,6 +443,7 @@
       if (eyebrow) panel.appendChild(el('p', 'bl-vx__panel-eyebrow', eyebrow));
       panel.appendChild(el('h3', 'bl-vx__panel-title', active.title));
       if (active.role) panel.appendChild(el('p', 'bl-vx__panel-role', active.role));
+      if (active.virtue) panel.appendChild(el('p', 'bl-vx__panel-virtue', 'Doctrine virtue: ' + active.virtue));
       panel.appendChild(config.panel(active));
     }
 

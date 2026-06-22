@@ -11,6 +11,7 @@
 window.BUSARA_CONVICTIONS = [
   {
     id: '01',
+    virtue: 'Curiosity', // The Busara Doctrine, Layer 5 — Institutional Virtues
     title: 'Problems deserve understanding before solutions',
     role: 'Understanding first',
     why: 'A solution proposed before a problem is understood is a guess wearing the costume of progress. Most failed systems were answers to questions no one had verified. We refuse to start there.',
@@ -18,6 +19,7 @@ window.BUSARA_CONVICTIONS = [
   },
   {
     id: '02',
+    virtue: 'Discipline', // The Busara Doctrine, Layer 5 — Institutional Virtues
     title: 'Evidence should guide design',
     role: 'Evidence over assumption',
     why: 'Assumptions are cheap and confident; evidence is costly and humbling. Infrastructure that will carry people\u2019s livelihoods deserves the costly kind. Every design decision should be traceable to something we learned.',
@@ -25,6 +27,7 @@ window.BUSARA_CONVICTIONS = [
   },
   {
     id: '03',
+    virtue: 'Stewardship', // The Busara Doctrine, Layer 5 — Institutional Virtues
     title: 'Institutions outlast applications',
     role: 'Build for decades',
     why: 'Applications come and go with the funding and the fashion. Institutions \u2014 their purpose, membership and governance \u2014 are what endure and what people come to trust. We design the institution first, and let the software inherit it.',
@@ -32,6 +35,7 @@ window.BUSARA_CONVICTIONS = [
   },
   {
     id: '04',
+    virtue: 'Integrity', // The Busara Doctrine, Layer 5 — Institutional Virtues
     title: 'Trust must be earned',
     role: 'Earned, never claimed',
     why: 'Trust cannot be declared in a tagline. It is the accumulated result of decisions that were transparent, accountable, and kept. An institution earns it slowly and can lose it in a moment.',
@@ -39,6 +43,7 @@ window.BUSARA_CONVICTIONS = [
   },
   {
     id: '05',
+    virtue: 'Humility', // The Busara Doctrine, Layer 5 — Institutional Virtues
     title: 'Technology serves people',
     role: 'People before technology',
     why: 'Technology is a means, never the point. The moment a system serves its own elegance over the people inside it, it has failed \u2014 however impressive it looks. People, communities and institutions come first.',

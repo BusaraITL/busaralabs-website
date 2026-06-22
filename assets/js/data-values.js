@@ -13,6 +13,7 @@
 window.BUSARA_VALUES = [
   {
     id: '01',
+    virtue: 'Curiosity', // The Busara Doctrine, Layer 5 — Institutional Virtues
     title: 'Observe carefully',
     role: 'Attention before opinion',
     why: 'Most of what matters about a problem is visible only to someone patient enough to watch before deciding. The people who build well here are unhurried observers first \u2014 they notice what others walk past.',
@@ -20,6 +21,7 @@ window.BUSARA_VALUES = [
   },
   {
     id: '02',
+    virtue: 'Discipline', // The Busara Doctrine, Layer 5 — Institutional Virtues
     title: 'Question assumptions',
     role: 'Doubt, productively',
     why: 'Every system inherits assumptions, and the costly ones are the assumptions no one thought to question. We value people who can hold their own ideas up to the light \u2014 including the ones they would prefer were true.',
@@ -27,6 +29,7 @@ window.BUSARA_VALUES = [
   },
   {
     id: '03',
+    virtue: 'Humility', // The Busara Doctrine, Layer 5 — Institutional Virtues
     title: 'Validate with evidence',
     role: 'Proof over preference',
     why: 'Confidence is easy to manufacture and expensive to trust. Infrastructure that will carry people\u2019s livelihoods deserves decisions traceable to something real, not to whoever argued hardest.',
@@ -34,6 +37,7 @@ window.BUSARA_VALUES = [
   },
   {
     id: '04',
+    virtue: 'Stewardship', // The Busara Doctrine, Layer 5 — Institutional Virtues
     title: 'Design responsibly',
     role: 'Consequences first',
     why: 'Every design decision lands on someone. We value people who think past the elegant solution to the person who will live with it \u2014 including the people not in the room when the choice is made.',
@@ -41,6 +45,7 @@ window.BUSARA_VALUES = [
   },
   {
     id: '05',
+    virtue: 'Integrity', // The Busara Doctrine, Layer 5 — Institutional Virtues
     title: 'Build what can be trusted',
     role: 'Earned, never claimed',
     why: 'Trust is the whole product. It is built slowly through decisions that were transparent, accountable and kept \u2014 and it can be lost in a single careless one. The work is only finished when it deserves to be relied on.',
