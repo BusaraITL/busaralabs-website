@@ -505,6 +505,27 @@
         }
       });
     }
+    // --- Doctrine: full seven-stage methodology, including Purpose Alignment ---
+    var doctMethHost = document.querySelector('[data-vx="doctrine-methodology"]');
+    if (doctMethHost && Array.isArray(window.BUSARA_DOCTRINE_METHODOLOGY)) {
+      VerticalExplorer(doctMethHost, {
+        variant: 'light',
+        items: window.BUSARA_DOCTRINE_METHODOLOGY,
+        ariaLabel: 'Layer 4 — the full Methodology loop',
+        eyebrow: function (item) { return 'Stage ' + item.id + ' · Layer 4'; },
+        related: function (active, item, ai, ii) { return ii === ai + 1; },
+        panel: function (item) {
+          var body = el('div', 'bl-vx__body');
+          body.appendChild(el('p', 'bl-vx__purpose', item.purpose));
+          var fields = el('div', 'bl-vx__fields');
+          fields.appendChild(fieldList('Activities', item.methods));
+          fields.appendChild(fieldText('Expected output', item.outputs));
+          fields.appendChild(fieldText('How it informs the next stage', item.informs, true));
+          body.appendChild(fields);
+          return body;
+        }
+      });
+    }
 
     // --- About: enduring convictions (expandable via the same component) ---
     var convHost = document.querySelector('[data-vx="convictions"]');
@@ -609,7 +630,7 @@
     stage.appendChild(el('div', 'bl-orbit__track'));
     var center = document.createElement('img');
     center.className = 'bl-orbit__center';
-    center.src = 'assets/images/logo/busara-labs-mark.svg';
+    center.src = '/assets/images/logo/busara-labs-mark.svg';
     center.setAttribute('alt', '');
     center.setAttribute('aria-hidden', 'true');
     stage.appendChild(center);
