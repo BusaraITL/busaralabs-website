@@ -31,7 +31,9 @@
 
 name                   = "busaralabs-website"
 compatibility_date     = "2024-01-01"
-pages_build_output_dir = "."
+# Upload only public/. scripts/publish-public.js builds that
+# directory from an allowlist. The repository root must not be served.
+pages_build_output_dir = "public"
 
 # ============================================================
 # PREVIEW ENVIRONMENT (staging branch → staging.busaralabs.com)

@@ -152,6 +152,11 @@ jobs:
             echo "ERROR: Build output assets/js/main.bundle.js not found."
             exit 1
           fi
+          if [ ! -f "public/index.html" ]; then
+            echo "ERROR: public/index.html was not published."
+            exit 1
+          fi
+          node scripts/assert-public-artifact.js public
           echo "Build output verified."
           wc -c assets/js/main.bundle.js
 
@@ -185,12 +190,15 @@ jobs:
       - name: Build assets
         run: node build.js
 
+      - name: Refuse a non-public artifact
+        run: node scripts/assert-public-artifact.js public
+
       - name: Deploy to Cloudflare Pages (staging)
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy . --project-name=busaralabs-website --branch=staging
+          command: pages deploy public --project-name=busaralabs-website --branch=staging
 
       # --------------------------------------------------------
       # SMOKE TEST — staging
@@ -259,12 +267,15 @@ jobs:
       - name: Build assets
         run: node build.js
 
+      - name: Refuse a non-public artifact
+        run: node scripts/assert-public-artifact.js public
+
       - name: Deploy to Cloudflare Pages (production)
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy . --project-name=busaralabs-website --branch=main
+          command: pages deploy public --project-name=busaralabs-website --branch=main
 
       # --------------------------------------------------------
       # SMOKE TEST — production

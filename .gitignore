@@ -153,6 +153,8 @@ package-lock.json.bak
 dist/
 build/
 out/
+# Generated upload directory. It is not the source of truth.
+/public/
 .cache/
 .parcel-cache/
 .next/
