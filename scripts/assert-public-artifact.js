@@ -1,43 +1,29 @@
-/* Fail if the Pages output directory contains operational files.
-   The deploy command uploads this directory as static files.
-   Anything here is public. */
+/* Allowlist for the Pages upload directory.
+   A file is public only when its path matches this list.
+   Case variants, encoded names, source maps, and operational
+   directories fail closed because they are not on the list. */
 
 'use strict';
 
 const fs = require('fs');
 const path = require('path');
 
-const BANNED_DIR_NAMES = new Set([
-  'workers',
-  'src',
-  '.github',
-  '.git',
-  'keys',
-  'node_modules',
-  'docs',
-  'scripts',
-  'tests',
+const ROOT_FILES = new Set([
+  '_headers',
+  '_redirects',
+  'robots.txt',
+  'sitemap.xml',
+  'site.webmanifest',
 ]);
 
-const BANNED_BASENAMES = new Set([
-  'wrangler.toml',
-  'wrangler.worker.toml',
-  'HANDOVER.md',
-  'package.json',
-  'package-lock.json',
-  '.env',
-  '.env.example',
-  '.env.local',
-  'secrets.json',
-  'credentials.json',
-]);
-
-const BANNED_EXTENSIONS = new Set([
-  '.md',
-  '.pem',
-  '.key',
-  '.p12',
-  '.pfx',
+const ASSET_EXTENSIONS = new Set([
+  '.css',
+  '.js',
+  '.png',
+  '.svg',
+  '.webp',
+  '.ico',
+  '.woff2',
 ]);
 
 function assertPublicArtifact(root) {
@@ -57,41 +43,75 @@ function walk(root, dir, violations) {
     const full = path.join(dir, entry.name);
     const rel = path.relative(root, full);
     if (entry.isDirectory()) {
-      if (BANNED_DIR_NAMES.has(entry.name) || entry.name.startsWith('.env')) {
-        violations.push(rel);
+      if (!allowedDirectory(rel)) {
+        violations.push(rel + '/');
         continue;
       }
       walk(root, full, violations);
       continue;
     }
-    const lower = entry.name.toLowerCase();
-    if (
-      BANNED_BASENAMES.has(entry.name) ||
-      BANNED_EXTENSIONS.has(path.extname(lower)) ||
-      lower.startsWith('.env')
-    ) {
+    if (!allowedFile(rel) || looksLikeKeyMaterial(full)) {
       violations.push(rel);
-      continue;
     }
-    if (looksLikeKeyMaterial(full)) violations.push(rel + ' (key material)');
   }
+}
+
+function allowedDirectory(rel) {
+  const parts = segment(rel);
+  if (!parts.length) return false;
+  if (parts[0] === 'assets' || parts[0] === 'functions') {
+    return parts.every((part) => safeSegment(part));
+  }
+  return false;
+}
+
+function allowedFile(rel) {
+  const parts = segment(rel);
+  if (!parts.length || parts.some((part) => !safeSegment(part))) return false;
+  if (parts.length === 1) {
+    const name = parts[0];
+    if (ROOT_FILES.has(name)) return true;
+    return name.endsWith('.html') && name === name.toLowerCase() && !name.includes('..');
+  }
+  const ext = path.extname(parts[parts.length - 1]).toLowerCase();
+  if (ext === '.map') return false;
+  if (parts[0] === 'assets') return ASSET_EXTENSIONS.has(ext);
+  if (parts[0] === 'functions') return ext === '.js';
+  return false;
+}
+
+function segment(rel) {
+  return rel.split(path.sep).filter(Boolean);
+}
+
+function safeSegment(part) {
+  if (!part || part === '.' || part === '..') return false;
+  if (part.startsWith('.')) return false;
+  const lower = part.toLowerCase();
+  if (lower === 'wrangler.toml' || lower === 'handover.md' || lower === 'package.json' || lower === 'package-lock.json' || lower === 'build.js') {
+    return false;
+  }
+  return true;
 }
 
 function looksLikeKeyMaterial(file) {
-  const fd = fs.openSync(file, 'r');
+  let fd;
   try {
+    fd = fs.openSync(file, 'r');
     const buf = Buffer.alloc(256);
     const n = fs.readSync(fd, buf, 0, 256, 0);
     return buf.subarray(0, n).toString('utf8').includes('PRIVATE KEY');
+  } catch {
+    return true;
   } finally {
-    fs.closeSync(fd);
+    if (fd !== undefined) fs.closeSync(fd);
   }
 }
 
-module.exports = { assertPublicArtifact };
+module.exports = { assertPublicArtifact, allowedFile };
 
 if (require.main === module) {
   const root = path.resolve(process.argv[2] || path.join(__dirname, '..', 'public'));
   assertPublicArtifact(root);
-  console.log('Public artifact contains only publishable files.');
+  console.log('Public artifact matches the allowlist.');
 }
