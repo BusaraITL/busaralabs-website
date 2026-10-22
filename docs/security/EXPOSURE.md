@@ -20,6 +20,16 @@ Live production and staging deploy SHA `a2bdcba`, whose workflow runs `wrangler 
 
 Verified locally after `node build.js`: the guard passed on `public/`.
 
+## Extended live paths (2026-10-22)
+
+On production, www, staging, `busaralabs-website.pages.dev`, and `staging.busaralabs-website.pages.dev`:
+
+- 200: `/wrangler.toml`, `/wrangler%2etoml`, `/HANDOVER.md`, `/package.json`, `/package-lock.json`, `/build.js`, `/workers/wrangler.worker.toml`, `/workers/_worker.js`
+- 404: `/WRANGLER.TOML`, `/Handover.md`, `/wrangler.toml/`, `/.git/HEAD`, `/.git/config`, `/node_modules/wrangler/package.json`, `/scripts/assemble-site.js`, `/docs/environment.md`, `/assets/js/main.js.map`, `/assets/js/main.bundle.js.map`
+- 400: `/%2e%2e/wrangler.toml`
+
+The encoded dot in `/wrangler%2etoml` is decoded and still served. Case variants are not a second copy; the canonical names are enough to fail the gate.
+
 ## Live status
 
 Failed and open. This branch was not deployed. Removing the files from `busaralabs.com` requires a production deploy, which this work does not perform.

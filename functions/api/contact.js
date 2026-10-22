@@ -41,6 +41,7 @@
 import { buildPayload, FIELD_LIMITS } from '../../workers/payload-contract.js';
 import { evaluateCollectionGate, collectionDisabledBody } from '../lib/collection-gate.js';
 import { evaluateResourceIsolation } from '../lib/resource-guard.js';
+import { evaluateAbuseControls } from '../lib/abuse-controls.js';
 
 // ============================================================
 // TURNSTILE VERIFICATION ENDPOINT
@@ -53,6 +54,9 @@ const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/sit
 // ============================================================
 export async function onRequestPost(context) {
   const { request, env } = context;
+
+  const abuse = await evaluateAbuseControls(request, env);
+  if (abuse.blocked) return abuseResponse(abuse.status);
 
   // Kill switch before the body is read, stored, or logged.
   const gate = evaluateCollectionGate(env);
@@ -222,8 +226,22 @@ export async function onRequestPost(context) {
 // ============================================================
 // CORS PREFLIGHT HANDLER
 // ============================================================
+export function onRequestGet() {
+  return methodNotAllowed();
+}
+
+export function onRequestPut() {
+  return methodNotAllowed();
+}
+
+export function onRequestDelete() {
+  return methodNotAllowed();
+}
+
 export async function onRequestOptions(context) {
-  const { env } = context;
+  const { request, env } = context;
+  const abuse = await evaluateAbuseControls(request, env);
+  if (abuse.blocked) return abuseResponse(abuse.status);
   const gate = evaluateCollectionGate(env);
   if (!gate.allowed) {
     return jsonResponse(collectionDisabledBody(), 403, {
@@ -398,6 +416,29 @@ function buildCorsHeaders(env) {
 // ============================================================
 // RESPONSE HELPER
 // ============================================================
+function abuseResponse(status) {
+  const headers = {
+    'Cache-Control': 'no-store',
+    'Content-Type': 'application/json',
+  };
+  if (status === 429) headers['Retry-After'] = '60';
+  const error = status === 429
+    ? 'Too many requests. Try again later.'
+    : 'Request refused.';
+  return new Response(JSON.stringify({ success: false, error }), { status, headers });
+}
+
+function methodNotAllowed() {
+  return new Response(JSON.stringify({ success: false, error: 'Method not allowed.' }), {
+    status: 405,
+    headers: {
+      'Cache-Control': 'no-store',
+      'Content-Type': 'application/json',
+      Allow: 'POST, OPTIONS',
+    },
+  });
+}
+
 function jsonResponse(body, status, corsHeaders = {}) {
   return new Response(JSON.stringify(body), {
     status,

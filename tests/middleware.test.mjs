@@ -15,8 +15,15 @@ test('production hosts are not given a noindex header', async () => {
   for (const host of ['https://busaralabs.com/', 'https://www.busaralabs.com/about']) {
     const response = await run(host);
     assert.equal(response.headers.get('X-Robots-Tag'), null, host);
-    assert.match(response.headers.get('Content-Security-Policy'), /form-action 'none'/);
-    assert.doesNotMatch(response.headers.get('Content-Security-Policy'), /cloudflareinsights/);
+    const csp = response.headers.get('Content-Security-Policy');
+    assert.match(csp, /form-action 'none'/);
+    assert.match(csp, /script-src 'self'/);
+    assert.doesNotMatch(csp, /unsafe-inline|nonce-|cloudflareinsights/);
+    assert.equal(response.headers.get('Strict-Transport-Security'), 'max-age=63072000; includeSubDomains; preload');
+    assert.equal(response.headers.get('X-Content-Type-Options'), 'nosniff');
+    assert.equal(response.headers.get('X-Frame-Options'), 'DENY');
+    assert.equal(response.headers.get('Referrer-Policy'), 'strict-origin-when-cross-origin');
+    assert.match(response.headers.get('Permissions-Policy'), /camera=\(\)/);
   }
 });
 

@@ -23,6 +23,16 @@ Identifiers below are copied from `wrangler.toml` and `workers/wrangler.worker.t
 
 Preview and staging share one resource set in Wrangler. There is no third database.
 
+| Component | Status | Reason |
+|---|---|---|
+| R2 | NOT APPLICABLE — NOT IMPLEMENTED | No `r2_buckets` binding. `assert-release-safe.js` fails if one is added. |
+| Service bindings | NOT APPLICABLE — NOT IMPLEMENTED | No `services` binding. The same check fails if one is added. |
+| User accounts | NOT APPLICABLE — NOT IMPLEMENTED | No account table, session store, or login route. |
+| Admin routes | NOT APPLICABLE — NOT IMPLEMENTED | Only `functions/api/contact.js`. |
+| Analytics binding | NOT APPLICABLE — NOT IMPLEMENTED | No analytics binding in Wrangler. |
+
+The preview half of `wrangler.toml`, above `[env.production]`, does not contain the production D1 id, the production KV id, or `contact-production`. The same is true of the staging half of the Worker file. That is a source check, not a dashboard check.
+
 ## Fail-closed behavior in the candidate
 
 `functions/lib/resource-guard.js` compares `ENVIRONMENT`, `CORS_ORIGIN`, and the three plain id vars.

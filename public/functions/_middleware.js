@@ -2,9 +2,9 @@
    BUSARA INFRASTRUCTURE & TECHNOLOGY LABS LTD
    functions/_middleware.js — CSP, and noindex off production
    ------------------------------------------------------------
-   CSP is per request so Cloudflare can stamp a nonce onto any
-   script it injects. This site does not load analytics. The
-   policy does not allow static.cloudflareinsights.com.
+   CSP allows only this origin. Scripts are files under /assets.
+   There is no nonce and no unsafe-inline, so an injected inline
+   script does not run.
 
    form-action 'none' blocks a form post while collection is off.
    mailto links are anchors, not form actions.
@@ -23,12 +23,12 @@ function isProductionHost(hostname) {
   return PRODUCTION_HOSTS.has(String(hostname || '').toLowerCase());
 }
 
-function contentSecurityPolicy(nonce) {
+function contentSecurityPolicy() {
   return [
     "default-src 'self'",
     "img-src 'self' data:",
     "style-src 'self'",
-    `script-src 'self' 'nonce-${nonce}'`,
+    "script-src 'self'",
     "font-src 'self'",
     "base-uri 'self'",
     "form-action 'none'",
@@ -37,6 +37,15 @@ function contentSecurityPolicy(nonce) {
     "frame-ancestors 'none'",
   ].join('; ');
 }
+
+const SECURITY_HEADERS = {
+  'Content-Security-Policy': contentSecurityPolicy(),
+  'Strict-Transport-Security': 'max-age=63072000; includeSubDomains; preload',
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'DENY',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+  'Permissions-Policy': 'geolocation=(), microphone=(), camera=(), payment=()',
+};
 
 export async function onRequest(context) {
   const url = new URL(context.request.url);
@@ -49,18 +58,16 @@ export async function onRequest(context) {
         'Content-Type': 'text/plain; charset=utf-8',
         'Cache-Control': 'no-store',
         'X-Robots-Tag': 'noindex, nofollow',
-        'X-Content-Type-Options': 'nosniff',
+        ...SECURITY_HEADERS,
       },
     });
   }
 
   const response = await context.next();
-  const nonceBytes = new Uint8Array(16);
-  crypto.getRandomValues(nonceBytes);
-  const nonce = btoa(String.fromCharCode(...nonceBytes));
-
   const headers = new Headers(response.headers);
-  headers.set('Content-Security-Policy', contentSecurityPolicy(nonce));
+  for (const [name, value] of Object.entries(SECURITY_HEADERS)) {
+    headers.set(name, value);
+  }
   if (!production) headers.set('X-Robots-Tag', 'noindex, nofollow');
 
   return new Response(response.body, {

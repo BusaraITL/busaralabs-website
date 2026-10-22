@@ -1,6 +1,6 @@
 # Remaining risks
 
-Release decision: **NO-GO**.
+Release decision: **NO-GO**. The gate table in `GATES.md` is the governing record.
 
 | Risk | Status |
 |---|---|

@@ -135,6 +135,20 @@ jobs:
       - name: Refuse a non-public artifact
         run: node scripts/assert-public-artifact.js public
 
+      - name: Refuse a root-directory or collection release
+        run: |
+          node scripts/assert-release-safe.js
+          HASH=$(find public -type f -print0 | sort -z | xargs -0 sha256sum | sha256sum | awk '{print $1}')
+          {
+            echo "### Release record"
+            echo "- sha: ${{ github.sha }}"
+            echo "- artifact_sha256: $HASH"
+            echo "- approver: ${{ github.actor }}"
+            echo "- output_dir: public"
+            echo "- collection: off"
+            echo "- deploy_result: not-started"
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Deploy to Cloudflare Pages (staging)
         uses: cloudflare/wrangler-action@9acf94ace14e7dc412b076f2c5c20b8ce93c79cd # v3
         with:
@@ -151,6 +165,7 @@ jobs:
           test "$HOME_STATUS" = "200"
           test "$TOML_STATUS" != "200"
           test "$DOC_STATUS" != "200"
+          echo "- deploy_result: smoke-checked" >> "$GITHUB_STEP_SUMMARY"
 
   deploy-production:
     name: Deploy — Production
@@ -179,6 +194,20 @@ jobs:
       - name: Refuse a non-public artifact
         run: node scripts/assert-public-artifact.js public
 
+      - name: Refuse a root-directory or collection release
+        run: |
+          node scripts/assert-release-safe.js
+          HASH=$(find public -type f -print0 | sort -z | xargs -0 sha256sum | sha256sum | awk '{print $1}')
+          {
+            echo "### Release record"
+            echo "- sha: ${{ github.sha }}"
+            echo "- artifact_sha256: $HASH"
+            echo "- approver: ${{ github.actor }}"
+            echo "- output_dir: public"
+            echo "- collection: off"
+            echo "- deploy_result: not-started"
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Deploy to Cloudflare Pages (production)
         uses: cloudflare/wrangler-action@9acf94ace14e7dc412b076f2c5c20b8ce93c79cd # v3
         with:
@@ -195,3 +224,4 @@ jobs:
           test "$HOME_STATUS" = "200"
           test "$TOML_STATUS" != "200"
           test "$DOC_STATUS" != "200"
+          echo "- deploy_result: smoke-checked" >> "$GITHUB_STEP_SUMMARY"

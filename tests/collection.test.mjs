@@ -7,7 +7,13 @@ import { processContactQueue } from '../workers/queue-consumer.js';
 function throwingRequest() {
   return {
     method: 'POST',
-    headers: { get() { return 'application/x-www-form-urlencoded'; } },
+    headers: {
+      get(name) {
+        return String(name).toLowerCase() === 'content-type'
+          ? 'application/x-www-form-urlencoded'
+          : null;
+      },
+    },
     formData() {
       throw new Error('body was read');
     },
