@@ -1,0 +1,12 @@
+{
+  "name": "Busara Infrastructure & Technology Labs",
+  "short_name": "Busara Labs",
+  "description": "Busara Labs. Infrastructure for trust. Paamoja is in development.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#F8F6F1",
+  "theme_color": "#001A33",
+  "icons": [
+    { "src": "/assets/img/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

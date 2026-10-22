@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- ============================================================
+       BUSARA LABS — Favicon
+       Same corrected geometry; bolder sans-serif B for legibility
+       at 16–32px (serif strokes disappear at favicon scale)
+       Version: 2.0 | June 2026
+       ============================================================ -->
+  <polygon points="30,40 170,40 135,160 65,160" fill="#C9A84C"/>
+  <text x="100" y="93.3"
+        font-family="'Plus Jakarta Sans', Arial, sans-serif"
+        font-size="92"
+        font-weight="800"
+        fill="#001A33"
+        text-anchor="middle"
+        dominant-baseline="central">B</text>
+</svg>

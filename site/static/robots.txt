@@ -1,0 +1,8 @@
+# Production host file. staging.busaralabs.com and any other non-production
+# host are answered by functions/_middleware.js with Disallow: / and
+# X-Robots-Tag: noindex. This file is what busaralabs.com serves.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://busaralabs.com/sitemap.xml

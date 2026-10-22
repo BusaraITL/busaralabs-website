@@ -1,0 +1,24 @@
+/* Design tokens. Brand hexes verified in repo assets/css/colors.css.
+   gold-ink is a V2 addition: gold darkened for text on light surfaces (5.7:1 on paper). */
+:root{
+  color-scheme:light;
+  --navy:#001A33; --navy-90:#0E2740; --navy-80:#33475C;
+  --gold:#C9A84C; --gold-ink:#7A5D17;
+  --paper:#F8F6F1; --paper-2:#EFEBE1; --white:#FFFFFF; --ink:#111111;
+  --paamoja:#FFBF00;
+  --text:#001A33; --text-muted:#3D4F63; --text-on-dark:#F8F6F1; --text-on-dark-muted:#C3CAD3;
+  --rule:rgba(0,26,51,.18); --rule-strong:#001A33; --rule-on-dark:rgba(248,246,241,.22);
+  --focus:#7A5D17; --focus-on-dark:#C9A84C;
+
+  --f-display:'DM Serif Display',Georgia,'Times New Roman',serif;
+  --f-sans:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
+  --f-mono:'IBM Plex Mono',ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+
+  --fs-mono:.75rem; --fs-sm:.9375rem; --fs-body:1.0625rem; --fs-lead:clamp(1.125rem,1rem + .5vw,1.375rem);
+  --fs-h3:clamp(1.25rem,1.1rem + .6vw,1.5rem); --fs-h2:clamp(2rem,1.4rem + 2.4vw,3.25rem);
+  --fs-h1:clamp(2.5rem,1.6rem + 4.2vw,5.25rem);
+
+  --s-1:.25rem; --s-2:.5rem; --s-3:.75rem; --s-4:1rem; --s-5:1.5rem; --s-6:2rem; --s-7:3rem; --s-8:4.5rem; --s-9:7rem;
+  --gutter:clamp(1.25rem,.8rem + 2vw,2.5rem); --max:82rem; --header-h:4.5rem;
+  --ease:cubic-bezier(.2,.6,.2,1); --dur:180ms;
+}

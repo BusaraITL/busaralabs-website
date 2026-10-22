@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en-KE" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy — Busara Labs</title>
+<meta name="description" content="How busaralabs.com handles data while collection is disabled.">
+<link rel="canonical" href="https://busaralabs.com/privacy-policy">
+<meta property="og:title" content="Privacy Policy — Busara Labs">
+<meta property="og:description" content="How busaralabs.com handles data while collection is disabled.">
+<meta property="og:url" content="https://busaralabs.com/privacy-policy">
+<meta property="og:type" content="website">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="stylesheet" href="/assets/css/fonts.css">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/base.css">
+<link rel="stylesheet" href="/assets/css/layout.css">
+<link rel="stylesheet" href="/assets/css/components.css">
+<script src="/assets/js/config.js" defer></script>
+<script src="/assets/js/nav.js" defer></script>
+<script src="/assets/js/scrollspy.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="Busara Labs, home">
+      <svg viewBox="30 40 140 120" aria-hidden="true" focusable="false"><polygon points="30,40 170,40 135,160 65,160" fill="#001A33"/><text x="100" y="93.3" font-family="'DM Serif Display', Georgia, serif" font-size="100" fill="#C9A84C" text-anchor="middle" dominant-baseline="central">B</text></svg>
+      <span><span class="brand-name">Busara Labs</span><span class="brand-tag">Infrastructure for Trust</span></span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" hidden><span class="nav-toggle-bars" aria-hidden="true"></span><span class="nav-toggle-label">Menu</span></button>
+    <nav class="site-nav" id="site-nav" aria-label="Primary">
+      <ul class="nav-list">
+        <li><a href="/">Home</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/doctrine">Doctrine</a></li>
+        <li><a href="/work">Our Work</a></li>
+        <li><a href="/paamoja">Paamoja</a></li>
+        <li><a href="/research-journal">Journal</a></li>
+        <li><a href="/careers">Careers</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+      <p class="nav-meta">Busara Infrastructure &amp; Technology Labs Ltd · Nairobi, Kenya</p>
+    </nav>
+  </div>
+</header>
+<main id="main" class="page-inner legal-sheet">
+<section class="sheet" aria-labelledby="privacy-title">
+  <div class="wrap prose">
+    <p class="sheet-ref"><span>Legal</span><span>Privacy</span></p>
+    <h1 id="privacy-title">Privacy Policy</h1>
+    <p class="legal-meta">Busara Infrastructure &amp; Technology Labs Ltd · Nairobi, Kenya</p>
+    <p>This notice describes what this website does today. It is not a registration certificate, and it does not say that the Office of the Data Protection Commissioner has cleared Busara Labs.</p>
+
+    <h2>Who is responsible</h2>
+    <p>The organisation responsible for this website is Busara Infrastructure &amp; Technology Labs Ltd, Nairobi, Kenya. For a data-protection question, write to <a href="mailto:compliance@busaralabs.com">compliance@busaralabs.com</a>. For a general question, write to <a href="mailto:hello@busaralabs.com">hello@busaralabs.com</a>.</p>
+
+    <h2>What the website does now</h2>
+    <p>The pages are informational. There is no account, no waitlist, and no careers upload. Application intake is not enabled. The contact routes are mailto links: they open the email application on your device. A message you send that way is not collected by this website.</p>
+    <p>The contact page may show a form labelled as a demonstration. That form does not submit to Busara Labs. With JavaScript off it is not shown. Completing it does not mean a message was received.</p>
+
+    <h2>The collection switch</h2>
+    <p>The codebase contains submission endpoints. They are off. Each one checks a server-side switch before it reads a submission. The switch is the environment variable <code>COLLECTION_ENABLED</code>. If that variable is missing, empty, or any value other than the exact string documented in the environment notes, the endpoint refuses the request. It does not store the submission and it does not write the submission in its log. Production cannot be turned on by that variable alone. A second acknowledgement variable is required when the environment is production. Those variables are not set by this release.</p>
+
+    <h2>Categories this release does not collect through the site</h2>
+    <p>Through its own pages and scripts, this release does not collect a name, email address, message, CV, identity document, or waitlist entry. The scripts do not set cookies and do not use local or session storage. They do not load an analytics script.</p>
+
+    <h2>Hosting</h2>
+    <p>The site is hosted on Cloudflare. Delivering a page means the host can see connection data, including an IP address and a user agent, as part of serving the request. This notice does not state a retention period for those host logs. Busara Labs does not operate that log store and has not published a period for it.</p>
+
+    <h2>If collection were turned on later</h2>
+    <p>It is not on. Turning it on is a separate decision. It would require an approved notice, a decision on the Office of the Data Protection Commissioner position, and an explicit production acknowledgement. It is not authorised by publishing this page.</p>
+    <p>The endpoint code, if that later decision were made, is written to process a name, an email address, a message, a consent flag, an IP address, and a user agent; to store those in a database; and to send an email through SendGrid in the United States. Older configuration comments mention Postmark. The code that sends mail calls SendGrid, not Postmark. Neither is used for form data while the switch is off. No retention period is stated here, because none is in effect. A number that appears in configuration is not a published retention period.</p>
+
+    <h2>Consent and your requests</h2>
+    <p>While the forms are off, the site does not ask you to consent to collection of form data, because it does not collect that data. A mailto message is a message you choose to send from your own mail application.</p>
+    <p>To ask what data Busara Labs holds, or to ask for a correction, write to <a href="mailto:compliance@busaralabs.com">compliance@busaralabs.com</a>. This page does not claim that a particular response time or a particular statutory process has been approved.</p>
+  </div>
+</section>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-sheet">
+      <div class="foot-cols">
+        <div class="foot-id">
+          <p class="brand"><svg viewBox="30 40 140 120" width="40" height="40" aria-hidden="true" focusable="false"><polygon points="30,40 170,40 135,160 65,160" fill="#001A33"/><text x="100" y="93.3" font-family="'DM Serif Display', Georgia, serif" font-size="100" fill="#C9A84C" text-anchor="middle" dominant-baseline="central">B</text></svg><span><span class="brand-name">Busara Labs</span><span class="brand-tag">Infrastructure for Trust</span></span></p>
+          <p class="foot-index"><span>Sheets</span><span>A-01 to A-11 · P-01 to P-03</span></p>
+        </div>
+        <nav aria-label="Footer: sections"><h2>Sections</h2><ul><li><a href="/about">About</a></li><li><a href="/doctrine">Doctrine</a></li><li><a href="/work">Our Work</a></li><li><a href="/paamoja">Paamoja</a></li><li><a href="/research-journal">Journal</a></li><li><a href="/careers">Careers</a></li><li><a href="/contact">Contact</a></li></ul></nav>
+        <nav aria-label="Footer: knowledge"><h2>Knowledge</h2><ul><li><a href="/doctrine">Doctrine</a></li><li><a href="/research-journal">Research Journal</a></li></ul></nav>
+        <nav aria-label="Footer: legal"><h2>Legal</h2><ul><li><a href="/privacy-policy">Privacy Policy</a></li><li><a href="/terms-of-service">Terms &amp; Conditions</a></li><li><a href="/cookie-policy">Cookie Policy</a></li><li><a href="/disclaimer">Disclaimer</a></li></ul></nav>
+      </div>
+      <div class="foot-legal">
+        <span>© 2026 Busara Infrastructure &amp; Technology Labs Ltd. Registered in Kenya.</span>
+        <span>This website does not collect form data.</span>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
