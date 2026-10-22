@@ -22,7 +22,7 @@
 #   Secret Management Policy § 4.2 — Layer 2 mandatory enforcement.
 # ============================================================
 
-name: BIT Labs Website CI/CD
+name: Busara Labs Website CI/CD
 
 on:
   push:
@@ -152,8 +152,19 @@ jobs:
             echo "ERROR: Build output assets/js/main.bundle.js not found."
             exit 1
           fi
+          if [ ! -f "public/index.html" ]; then
+            echo "ERROR: Build output public/index.html not found."
+            exit 1
+          fi
+          if [ -f "public/wrangler.toml" ] || [ -f "public/HANDOVER.md" ] || [ -d "public/workers" ]; then
+            echo "ERROR: Deploy directory contains non-public repository files."
+            exit 1
+          fi
           echo "Build output verified."
           wc -c assets/js/main.bundle.js
+
+      - name: Test
+        run: npm test
 
   # ============================================================
   # JOB 2: DEPLOY STAGING
@@ -190,7 +201,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy . --project-name=busaralabs-website --branch=staging
+          command: pages deploy public --project-name=busaralabs-website --branch=staging
 
       # --------------------------------------------------------
       # SMOKE TEST — staging
@@ -264,7 +275,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy . --project-name=busaralabs-website --branch=main
+          command: pages deploy public --project-name=busaralabs-website --branch=main
 
       # --------------------------------------------------------
       # SMOKE TEST — production

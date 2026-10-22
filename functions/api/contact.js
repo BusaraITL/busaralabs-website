@@ -39,6 +39,7 @@
 'use strict';
 
 import { buildPayload, FIELD_LIMITS, ValidationError } from '../../workers/payload-contract.js';
+import { evaluateCollectionGate, collectionDisabledBody } from '../lib/collection-gate.js';
 
 // ============================================================
 // TURNSTILE VERIFICATION ENDPOINT
@@ -51,6 +52,14 @@ const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/sit
 // ============================================================
 export async function onRequestPost(context) {
   const { request, env } = context;
+
+  // Kill switch before the body is read, stored, or logged.
+  const gate = evaluateCollectionGate(env);
+  if (!gate.allowed) {
+    return jsonResponse(collectionDisabledBody(), 403, {
+      'Cache-Control': 'no-store',
+    });
+  }
 
   // Step 1: CORS headers (environment-aware)
   const corsHeaders = buildCorsHeaders(env);
@@ -206,6 +215,12 @@ export async function onRequestPost(context) {
 // ============================================================
 export async function onRequestOptions(context) {
   const { env } = context;
+  const gate = evaluateCollectionGate(env);
+  if (!gate.allowed) {
+    return jsonResponse(collectionDisabledBody(), 403, {
+      'Cache-Control': 'no-store',
+    });
+  }
   return new Response(null, {
     status:  204,
     headers: buildCorsHeaders(env),

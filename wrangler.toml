@@ -22,16 +22,23 @@
 #     preview    → staging.busaralabs.com (staging branch)
 #     production → busaralabs.com (main branch)
 #
-# SECRETS — set via Wrangler CLI (Pages syntax):
-#   npx wrangler pages secret put POSTMARK_API_TOKEN
-#   npx wrangler pages secret put TURNSTILE_SECRET_KEY
-#   npx wrangler pages secret put QUEUE_ENCRYPTION_KEY
-#   npx wrangler pages secret put NOTIFY_EMAIL
+# SECRETS — set via Wrangler CLI, per environment, never in this file.
+#   The queue consumer code sends mail through SendGrid (SENDGRID_API_KEY).
+#   Comments in older revisions of this file named Postmark. Postmark is
+#   not called by the code. Do not copy production secrets into preview.
+#
+# COLLECTION (default disabled — do not set these in the repository):
+#   COLLECTION_ENABLED=on          exact string, or every endpoint rejects
+#   COLLECTION_PRODUCTION_ACK=...  required as well when ENVIRONMENT=production
+#   See docs/environment.md. Neither variable is defined below.
 # ============================================================
 
 name                   = "busaralabs-website"
 compatibility_date     = "2024-01-01"
-pages_build_output_dir = "."
+# Deploy only the assembled public directory. The repository root
+# (HANDOVER.md, this file, workers/, src/) must not be uploaded.
+# See docs/environment.md.
+pages_build_output_dir = "public"
 
 # ============================================================
 # PREVIEW ENVIRONMENT (staging branch → staging.busaralabs.com)

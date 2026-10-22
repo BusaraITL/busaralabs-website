@@ -9,14 +9,17 @@
   },
   "scripts": {
     "build": "node build.js",
+    "test": "node --experimental-default-type=module --test tests/*.mjs",
     "dev": "wrangler pages dev . --port 3000",
-    "deploy": "npm run build && wrangler pages deploy .",
+    "deploy": "npm run build && wrangler pages deploy public",
     "lint:css": "stylelint 'assets/css/**/*.css'",
     "lint:js": "eslint 'assets/js/**/*.js'",
     "lint": "npm run lint:css && npm run lint:js"
   },
   "devDependencies": {
+    "axe-core": "^4.10.3",
     "esbuild": "^0.20.0",
+    "playwright-core": "^1.55.0",
     "wrangler": "^4.85.0"
   },
   "license": "UNLICENSED"
