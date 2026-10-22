@@ -38,8 +38,9 @@
 
 'use strict';
 
-import { buildPayload, FIELD_LIMITS, ValidationError } from '../../workers/payload-contract.js';
+import { buildPayload, FIELD_LIMITS } from '../../workers/payload-contract.js';
 import { evaluateCollectionGate, collectionDisabledBody } from '../lib/collection-gate.js';
+import { evaluateResourceIsolation } from '../lib/resource-guard.js';
 
 // ============================================================
 // TURNSTILE VERIFICATION ENDPOINT
@@ -61,7 +62,17 @@ export async function onRequestPost(context) {
     });
   }
 
-  // Step 1: CORS headers (environment-aware)
+  const isolation = evaluateResourceIsolation(env);
+  if (!isolation.ok || !env.QUEUE_ENCRYPTION_KEY || !env.TURNSTILE_SECRET_KEY) {
+    console.error('[contact] Side effects refused before the body was read.', {
+      reason: isolation.ok ? 'required-secret-missing' : isolation.reason,
+    });
+    return jsonResponse(collectionDisabledBody(), 403, {
+      'Cache-Control': 'no-store',
+    });
+  }
+
+  // Step 1: CORS headers (environment-aware, no production fallback)
   const corsHeaders = buildCorsHeaders(env);
 
   try {
@@ -178,7 +189,7 @@ export async function onRequestPost(context) {
       email,
       message,
       consentTs,
-      environment: env.ENVIRONMENT || 'production',
+      environment: env.ENVIRONMENT,
     });
 
     const encryptedPayload = await encryptPayload(payload, env.QUEUE_ENCRYPTION_KEY);
@@ -188,17 +199,15 @@ export async function onRequestPost(context) {
     await incrementRateLimit(env.RATE_LIMIT_KV, `ip:${ip}`, 3600);
     await incrementRateLimit(env.RATE_LIMIT_KV, `email:${email}`, 3600);
 
-    // Step 12: Success — no personal data in response
+    // Step 12: Success — no personal data and no database id
     return jsonResponse({
-      success:   true,
-      message:   'Your message has been received. We will respond within 24 hours.',
-      messageId: submissionId,
+      success: true,
+      message: 'Submission accepted.',
     }, 200, corsHeaders);
 
   } catch (err) {
-    // Log internally — ID only, no personal data
     console.error('[contact] Unhandled error:', {
-      error:     err.message,
+      name: err && err.name ? err.name : 'Error',
       timestamp: new Date().toISOString(),
     });
 
@@ -276,9 +285,8 @@ async function checkRateLimit(kv, key, limit, ttlSeconds) {
     const current = await kv.get(key);
     return current !== null && parseInt(current) >= limit;
   } catch {
-    // If KV is unavailable, fail open — don't block legitimate users
     console.error('[contact] Rate limit KV read failed for key type:', key.split(':')[0]);
-    return false;
+    return true;
   }
 }
 
@@ -297,9 +305,8 @@ async function incrementRateLimit(kv, key, ttlSeconds) {
 // ============================================================
 async function verifyTurnstile(token, ip, secretKey) {
   if (!secretKey) {
-    // Local dev — skip verification if no secret configured
-    console.warn('[contact] TURNSTILE_SECRET_KEY not set — skipping verification');
-    return true;
+    console.error('[contact] Turnstile secret missing; verification refused');
+    return false;
   }
 
   try {
@@ -329,8 +336,7 @@ async function verifyTurnstile(token, ip, secretKey) {
 // ============================================================
 async function encryptPayload(payload, encryptionKey) {
   if (!encryptionKey) {
-    // Local dev — skip encryption
-    return JSON.stringify(payload);
+    throw new Error('Queue encryption is not configured');
   }
 
   const iv          = crypto.getRandomValues(new Uint8Array(12));
@@ -373,7 +379,14 @@ async function parseFormData(request) {
 // CORS HELPERS
 // ============================================================
 function buildCorsHeaders(env) {
-  const origin = env.CORS_ORIGIN || 'https://busaralabs.com';
+  const origin = typeof env.CORS_ORIGIN === 'string' ? env.CORS_ORIGIN : '';
+  if (!origin) {
+    return {
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'Cache-Control': 'no-store',
+    };
+  }
   return {
     'Access-Control-Allow-Origin':  origin,
     'Access-Control-Allow-Methods': 'POST, OPTIONS',

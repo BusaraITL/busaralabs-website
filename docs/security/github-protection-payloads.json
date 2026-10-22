@@ -1,0 +1,146 @@
+{
+  "note": "Apply only with a token that has administration. This review token received HTTP 403. Do not merge or deploy as part of applying these.",
+  "collaborator_seen": {
+    "login": "CompBusaraLabs",
+    "id": 279621574,
+    "role": "maintain",
+    "admin": false
+  },
+  "classic_branch_protection": {
+    "method": "PUT",
+    "paths": [
+      "/repos/BusaraITL/busaralabs-website/branches/main/protection",
+      "/repos/BusaraITL/busaralabs-website/branches/staging/protection"
+    ],
+    "body": {
+      "required_status_checks": {
+        "strict": true,
+        "contexts": ["Validate"]
+      },
+      "enforce_admins": true,
+      "required_pull_request_reviews": {
+        "dismiss_stale_reviews": true,
+        "require_code_owner_reviews": true,
+        "required_approving_review_count": 1
+      },
+      "restrictions": null,
+      "required_linear_history": true,
+      "allow_force_pushes": false,
+      "allow_deletions": false,
+      "block_creations": false,
+      "required_conversation_resolution": true,
+      "lock_branch": false,
+      "allow_fork_syncing": false
+    }
+  },
+  "ruleset_main": {
+    "method": "POST",
+    "path": "/repos/BusaraITL/busaralabs-website/rulesets",
+    "body": {
+      "name": "Busara protected branch main",
+      "target": "branch",
+      "enforcement": "active",
+      "bypass_actors": [],
+      "conditions": {
+        "ref_name": {
+          "include": ["refs/heads/main"],
+          "exclude": []
+        }
+      },
+      "rules": [
+        {"type": "deletion"},
+        {"type": "non_fast_forward"},
+        {
+          "type": "pull_request",
+          "parameters": {
+            "required_approving_review_count": 1,
+            "dismiss_stale_reviews_on_push": true,
+            "require_code_owner_review": true,
+            "require_last_push_approval": true,
+            "required_review_thread_resolution": true
+          }
+        },
+        {
+          "type": "required_status_checks",
+          "parameters": {
+            "strict_required_status_checks_policy": true,
+            "required_status_checks": [{"context": "Validate"}]
+          }
+        }
+      ]
+    }
+  },
+  "ruleset_staging": {
+    "method": "POST",
+    "path": "/repos/BusaraITL/busaralabs-website/rulesets",
+    "body": {
+      "name": "Busara protected branch staging",
+      "target": "branch",
+      "enforcement": "active",
+      "bypass_actors": [],
+      "conditions": {
+        "ref_name": {
+          "include": ["refs/heads/staging"],
+          "exclude": []
+        }
+      },
+      "rules": [
+        {"type": "deletion"},
+        {"type": "non_fast_forward"},
+        {
+          "type": "pull_request",
+          "parameters": {
+            "required_approving_review_count": 1,
+            "dismiss_stale_reviews_on_push": true,
+            "require_code_owner_review": true,
+            "require_last_push_approval": true,
+            "required_review_thread_resolution": true
+          }
+        },
+        {
+          "type": "required_status_checks",
+          "parameters": {
+            "strict_required_status_checks_policy": true,
+            "required_status_checks": [{"context": "Validate"}]
+          }
+        }
+      ]
+    }
+  },
+  "production_environment": {
+    "method": "PUT",
+    "path": "/repos/BusaraITL/busaralabs-website/environments/production",
+    "body": {
+      "wait_timer": 0,
+      "prevent_self_review": true,
+      "reviewers": [{"type": "User", "id": 279621574}],
+      "deployment_branch_policy": {
+        "protected_branches": false,
+        "custom_branch_policies": true
+      }
+    },
+    "then": {
+      "method": "POST",
+      "path": "/repos/BusaraITL/busaralabs-website/environments/production/deployment-branch-policies",
+      "body": {"name": "main", "type": "branch"}
+    }
+  },
+  "staging_environment": {
+    "method": "PUT",
+    "path": "/repos/BusaraITL/busaralabs-website/environments/staging",
+    "body": {
+      "wait_timer": 0,
+      "prevent_self_review": false,
+      "reviewers": [],
+      "deployment_branch_policy": {
+        "protected_branches": false,
+        "custom_branch_policies": true
+      }
+    },
+    "then": {
+      "method": "POST",
+      "path": "/repos/BusaraITL/busaralabs-website/environments/staging/deployment-branch-policies",
+      "body": {"name": "staging", "type": "branch"}
+    }
+  }
+}

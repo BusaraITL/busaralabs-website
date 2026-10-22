@@ -423,11 +423,7 @@ function main() {
   copyDir(path.join(ROOT, 'site', 'assets'), path.join(OUT, 'assets'));
   copyDir(path.join(ROOT, 'functions'), path.join(OUT, 'functions'));
   copyDir(path.join(ROOT, 'site', 'static'), OUT);
-  const banned = ['wrangler.toml', 'HANDOVER.md', 'package.json'];
-  banned.forEach((name) => {
-    if (fs.existsSync(path.join(OUT, name))) throw new Error('Refusing to publish ' + name);
-  });
-  if (fs.existsSync(path.join(OUT, 'workers'))) throw new Error('Refusing to publish workers/');
+  require('./assert-public-artifact').assertPublicArtifact(OUT);
   console.log('Assembled ' + pages.length + ' HTML files into public/');
 }
 

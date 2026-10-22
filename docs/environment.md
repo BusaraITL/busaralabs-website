@@ -10,6 +10,8 @@ Busara Infrastructure & Technology Labs Ltd. This file describes the switches in
 
 The live site checked on 2026-10-22 still serves `/wrangler.toml` and `/HANDOVER.md` with HTTP 200. That is the current deployment, which uploads the repository root. This branch does not change the live site until someone deploys it.
 
+Resource identifiers, Access, secrets, and the release gates are recorded in `docs/security/`. Staging and preview refuse side effects when their plain resource vars match a production id. That check does not prove the Cloudflare binding. Non-production never sends mail and never runs the retention delete.
+
 ## Collection switch
 
 Every submission path calls `evaluateCollectionGate` in `functions/lib/collection-gate.js` before it reads a body:

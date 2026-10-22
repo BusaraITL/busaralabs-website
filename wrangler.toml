@@ -48,6 +48,11 @@ pages_build_output_dir = "public"
 [env.preview.vars]
 ENVIRONMENT          = "staging"
 CORS_ORIGIN          = "https://staging.busaralabs.com"
+# Plain identifiers so the Worker can fail closed. They must match
+# the binding ids below. They are not proof of the live binding.
+D1_DATABASE_ID       = "0bf0fbac-152e-4427-9f1a-47e4873d23db"
+KV_NAMESPACE_ID      = "9133b26c873640f7af02b15e8b9a54a8"
+QUEUE_NAME           = "contact-staging"
 RATE_LIMIT_IP_MAX    = "10"
 RATE_LIMIT_EMAIL_MAX = "5"
 RETENTION_DAYS       = "90"
@@ -73,6 +78,11 @@ queue   = "contact-staging"
 [env.production.vars]
 ENVIRONMENT          = "production"
 CORS_ORIGIN          = "https://busaralabs.com"
+# Plain identifiers so the Worker can fail closed. They must match
+# the binding ids below. They are not proof of the live binding.
+D1_DATABASE_ID       = "27a86a12-f597-4a23-9835-ee4f3e889185"
+KV_NAMESPACE_ID      = "e0f93da5591d40d3938b6c938e7c8d2a"
+QUEUE_NAME           = "contact-production"
 RATE_LIMIT_IP_MAX    = "5"
 RATE_LIMIT_EMAIL_MAX = "3"
 RETENTION_DAYS       = "90"

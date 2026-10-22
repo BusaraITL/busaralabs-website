@@ -1,0 +1,12 @@
+# Reviews for deploy config and the collection path.
+# CompBusaraLabs is the only collaborator this token could see
+# (role: maintain). Confirm this is the owner login before relying
+# on it. Branch protection was not applied by this change.
+
+/.github/workflows/ @CompBusaraLabs
+/wrangler.toml @CompBusaraLabs
+/workers/wrangler.worker.toml @CompBusaraLabs
+/functions/ @CompBusaraLabs
+/workers/ @CompBusaraLabs
+/scripts/assert-public-artifact.js @CompBusaraLabs
+/docs/security/ @CompBusaraLabs
