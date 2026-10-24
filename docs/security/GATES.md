@@ -106,6 +106,8 @@ No POST was sent. Tests use synthetic fixtures and a fetch stub. They do not col
 
 `POSTMARK_API_TOKEN` is not read by candidate JavaScript or by the updated PR #3 handler. Whether the token exists in Cloudflare is NOT VERIFIED. Delete it if it exists. Deleting a comment does not rotate it.
 
+On PR #3 the June success path still exists behind the flag. A missing KV read now refuses the request, and a missing Turnstile secret no longer skips verification. That path is not deployed, and collection stays off unless the flag is exactly `on`. The candidate's resource guard is the stricter control and is also not deployed.
+
 ## G6 Operations
 
 NOT VERIFIED. No backup was listed and no restore was run. D1 Time Travel, KV, and the queues need an isolated drill that never targets `busaralabs-prod-db` or the production KV and queues. The procedure is in `BACKUP-AND-RESTORE.md`. Rollback to the Pages deployment of `a2bdcba` is forbidden: it is the root upload and the June handler.

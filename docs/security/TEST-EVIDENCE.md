@@ -40,7 +40,7 @@ Commands on `cursor/prod-exposure-guard-6f86`:
 | `node --check` on `scripts/publish-public.js` and `scripts/assert-public-artifact.js` | 0 |
 | `node --experimental-default-type=module --check` on `functions/api/contact.js`, `functions/lib/collection-gate.js`, and `workers/queue-consumer.js` | 0 |
 | `node build.js` | 0 (13 HTML files, allowlist passed) |
-| `npm test` | 0 (5 passed) |
+| `npm test` | 0 (6 passed after the fail-closed KV and Turnstile checks) |
 | `npm audit --audit-level=critical` | 0 |
 
 Same high-severity advisory set. No fix was applied. The generated `public/` directory had no `wrangler.toml`, `HANDOVER.md`, `package.json`, `build.js`, `_worker.js`, or `.map` file.
