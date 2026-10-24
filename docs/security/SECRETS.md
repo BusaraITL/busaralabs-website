@@ -22,7 +22,7 @@ The workflow no longer references `secrets.CLOUDFLARE_API_TOKEN` or `secrets.CLO
 | `COLLECTION_ENABLED` | collection gate | Not a secret. Exact value `on` or the endpoint stays closed. Do not commit it. |
 | `COLLECTION_PRODUCTION_ACK` | collection gate | Not a secret. Exact acknowledgement string in `functions/lib/collection-gate.js`. Do not commit it. |
 
-Pages comments on `origin/main` also name `POSTMARK_API_TOKEN`. The candidate code does not read it. If a Postmark token exists in Cloudflare, delete it. Deletion of the name from comments does not rotate a live token.
+Pages comments on `origin/main` also name `POSTMARK_API_TOKEN`. The candidate JavaScript does not read it. The exposure branch's contact handler and queue consumer do not read it, and their Wrangler comments now say not to create it. Whether `POSTMARK_API_TOKEN` is configured in Cloudflare is NOT VERIFIED: the secret list returned 403 on 2026-10-24 (`secrets=read`). If it exists, the owner should delete it. Deletion of the name from comments does not rotate a live token. Do not print the value.
 
 `D1_DATABASE_ID`, `KV_NAMESPACE_ID`, and `QUEUE_NAME` are plain vars, not secrets. They are already in git and, today, on the public `/wrangler.toml`.
 

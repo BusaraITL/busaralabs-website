@@ -30,11 +30,17 @@ On production, www, staging, `busaralabs-website.pages.dev`, and `staging.busara
 
 The encoded dot in `/wrangler%2etoml` is decoded and still served. Case variants are not a second copy; the canonical names are enough to fail the gate.
 
+## Recheck on 2026-10-24
+
+GET and HEAD on all five hosts again returned 200 for `/wrangler.toml`, `/wrangler%2etoml`, `/HANDOVER.md`, `/package.json`, `/package-lock.json`, `/build.js`, `/workers/_worker.js`, and `/workers/wrangler.worker.toml`. The SHA-256 of the first six, except the worker toml, matches `a2bdcba` byte for byte. Final hosts matched. Bodies were not stored in this file. No private-key marker and no token assignment. `/assets/js/main.js.map`, `/assets/js/main.bundle.js.map`, `/.env`, and `/.git/HEAD` were 404. `/%2e%2e/wrangler.toml` was 400.
+
+`/workers/_worker.js` is a static javascript file in the root upload. `OPTIONS /api/contact` is 204 and `GET /api/contact` is 404, so the Pages Function is the contact route and the nested worker file is not an advanced-mode `_worker.js`.
+
 ## Live status
 
-Failed and open. This branch was not deployed. Removing the files from `busaralabs.com` requires a production deploy, which this work does not perform.
+FAIL / OPEN. This branch was not deployed. Removing the files from `busaralabs.com` requires a production deploy, which this work does not perform.
 
-A separate branch, `cursor/prod-exposure-guard-6f86`, changes only the publish directory and the guard on top of `main`. It does not change the contact handler, the page copy, or the collection behavior. Merging it is an owner decision. Until that release, production exposure remains **FAIL / OPEN**.
+`cursor/prod-exposure-guard-6f86` (draft PR #3, base `main`) is the minimum exposure change: publish `public/` by allowlist, refuse the repository root, point `wrangler pages deploy` at `public`, and make the June contact function and queue consumer return before they read, store, or send when the collection flag is not exactly `on`. It does not contain the V2 pages. It conflicts with PR #2 on the deploy files and on the contact handler. The deploy and post-deploy checks are in `PR3-DEPLOY-PROCEDURE.md`. Do not run them from this review. Production exposure remains **FAIL / OPEN** until that authorized deploy is followed by a live re-test.
 
 ## Rotation
 

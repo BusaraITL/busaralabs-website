@@ -2,9 +2,31 @@
 
 Cloudflare Access was not configured from this environment. No Cloudflare token was available, and none was requested. The notes below are the operator runbook.
 
+## Hostname inventory (observed 2026-10-24)
+
+| Host | Role | Anonymous result | Access header | Notes |
+|---|---|---|---|---|
+| `busaralabs.com` | Production custom domain | 200, no login redirect | none | Do not put this host in the staging application unless the owner decides that separately. |
+| `www.busaralabs.com` | Production custom domain | 200 | none | Same CORS origin as `busaralabs.com` on `OPTIONS /api/contact`. |
+| `staging.busaralabs.com` | Preview custom domain | 200 | none | Must be in the Access application. |
+| `busaralabs-website.pages.dev` | Production pages.dev alias | 200 | none | Direct origin. CORS origin is `https://busaralabs.com`. |
+| `staging.busaralabs-website.pages.dev` | Preview pages.dev alias | 200 | none | Direct origin. Platform `X-Robots-Tag: noindex` on several files. That tag is not Access. |
+| `https://<deployment>.busaralabs-website.pages.dev` | Per-deployment alias | NOT VERIFIED | NOT VERIFIED | Needs Pages Read. A failed Pages check is not a hostname inventory. |
+| `<other-branch>.busaralabs-website.pages.dev` | Branch preview hosts | NOT VERIFIED | NOT VERIFIED | The wildcard below is what has to cover them. |
+
+## Access test matrix
+
+| Actor | `staging.busaralabs.com` | `*.busaralabs-website.pages.dev` and the production alias | `busaralabs.com` / `www` |
+|---|---|---|---|
+| Anonymous | Observed 200. Expected after the application exists: not 200, Location is the Access login. | Observed 200 on both aliases tested. Same expected result. | Observed 200. Leave unchanged until a separate production decision. |
+| Authenticated, not on the allow-list | NOT VERIFIED. No IdP session was available. Expected: Access deny, not the site. | Same. | Not part of this application. |
+| Named reviewer with MFA | NOT VERIFIED. Expected: 200 only after Access and MFA. | Same, including a deployment alias and a branch preview host. | Not part of this application. |
+
+MFA is required on the identity provider. A one-time PIN to any address is not an allow-list. No bypass policy, no service token, and no exception for preview hostnames. `noindex` stays a secondary control only.
+
 ## What was observed
 
-Anonymous `GET` of `https://staging.busaralabs.com/`, `https://busaralabs-website.pages.dev/`, and `https://staging.busaralabs-website.pages.dev/wrangler.toml` returned the file with HTTP 200. Response headers did not include `www-authenticate`, `cf-access-authenticated-user-email`, or a redirect to a `cloudflareaccess.com` login. A burst of default Python requests earlier received HTTP 403 with a 17-byte `text/plain` body and no Access header. A later single request to the same URL returned 200. That 403 is not evidence of Access.
+Anonymous `GET` on 2026-10-24 of staging, both pages.dev aliases, and production returned HTTP 200. Response headers did not include `www-authenticate`, `cf-access-authenticated-user-email`, or a redirect to a `cloudflareaccess.com` login. A burst of default Python requests on an earlier day received HTTP 403 with a short `text/plain` body and no Access header. A later single request to the same URL returned 200. That 403 is not evidence of Access.
 
 `X-Robots-Tag` on the candidate is a supplementary control for every host other than `busaralabs.com` and `www.busaralabs.com`. It is not authentication. The live custom domains do not send it. The `staging.*.pages.dev` alias sent `X-Robots-Tag: noindex`, which is the platform default for that hostname and still served `wrangler.toml`.
 

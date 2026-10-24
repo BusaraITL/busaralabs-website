@@ -23,9 +23,9 @@ No console change. Expected: `origin/main` and `origin/staging` are `a2bdcba4aaf
 
 ## G1 Public exposure
 
-After the owner deploys PR #3, repeat the GET list in `GATES.md` on all five hosts. Expected: every operational path is not 200, including `/wrangler%2etoml`, `/package.json`, `/build.js`, and `/workers/wrangler.worker.toml`.
+The procedure to deploy PR #3, and the post-deploy GET/HEAD list, is `PR3-DEPLOY-PROCEDURE.md`. Do not run it until the owner writes a separate authorization. Expected after that deploy: every operational path is not 200, including `/wrangler%2etoml`, `/package.json`, `/build.js`, and `/workers/wrangler.worker.toml`, and `OPTIONS /api/contact` is 403. Until then G1 stays FAIL.
 
-Permission to confirm the active Pages deployment: G2 token, Cloudflare Pages Read. Expected deployment commit is the exposure-guard SHA, and the upload directory is `public`.
+Permission to confirm the active Pages deployment: G2 token, Cloudflare Pages Read. Expected deployment commit is the exposure-guard SHA, and the upload directory is `public`. The Pages Git check has failed closed; read the build log only to confirm it was not promoted, and do not copy the dashboard URL into git or chat (it contains an account id). Set the Git build command to `npm ci && node build.js` with output directory `public` before a retry. That settings change is an owner action and was not done here.
 
 ## G2 Access
 
@@ -51,7 +51,9 @@ Secrets, names only, environment scoped: staging holds `STAGING_CLOUDFLARE_API_T
 
 Apply `github-protection-payloads.json` with a separate Administration Write token, then discard that token. Verify with the GitHub verify token.
 
-Expected for `main` and `staging`: one approving review, code-owner review, status check `Validate`, no force-push, no deletion, no bypass actor. Production environment: required reviewer `CompBusaraLabs` after the owner confirms that login, deployment branch `main` only. Staging environment: deployment branch `staging` only.
+Observed 2026-10-24, before any apply: rulesets `[]`; classic protection GET 403 with accepted permission `administration=read` (NOT VERIFIED, do not retry the PUT); both environments have zero protection rules, null deployment branch policy, and `can_admins_bypass` true.
+
+Expected after the owner applies the payload: one approving review, code-owner review, status check `Validate`, no force-push, no deletion, no bypass actor, on `main` and `staging` separately. Production environment: required reviewer `CompBusaraLabs` after the owner confirms that login, `prevent_self_review` true, deployment branch `main` only. Staging environment: the same reviewer, `prevent_self_review` true, deployment branch `staging` only. Code-owner review has no effect on `main` until `CODEOWNERS` is on `main`.
 
 Then run `G4-CONTROLLED-TEST.md`.
 

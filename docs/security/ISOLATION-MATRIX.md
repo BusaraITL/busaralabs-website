@@ -33,6 +33,32 @@ Preview and staging share one resource set in Wrangler. There is no third databa
 
 The preview half of `wrangler.toml`, above `[env.production]`, does not contain the production D1 id, the production KV id, or `contact-production`. The same is true of the staging half of the Worker file. That is a source check, not a dashboard check.
 
+## Recheck 2026-10-24 — expected, observed, result
+
+Different ids in git are not proof of the binding Cloudflare is using. Live state is NOT VERIFIED unless the evidence column is an actual read.
+
+| Resource | Expected identity | Observed | Who can reach it | Evidence | Result |
+|---|---|---|---|---|---|
+| D1 | Staging/preview `busaralabs-staging-db` `0bf0fbac-152e-4427-9f1a-47e4873d23db`. Production `busaralabs-prod-db` `27a86a12-f597-4a23-9835-ee4f3e889185`. | Those ids are in the live toml and in git at `a2bdcba`. The attached binding was not read. | NOT VERIFIED | Config file served over HTTP. Dashboard not opened. | NOT VERIFIED |
+| KV | Staging `9133b26c873640f7af02b15e8b9a54a8`. Production `e0f93da5591d40d3938b6c938e7c8d2a`. | Same, as config. | NOT VERIFIED | Same. Do not list keys. | NOT VERIFIED |
+| Queues and consumers | `contact-staging` plus `contact-staging-dlq`. Production pair `contact-production` and `contact-production-dlq`. Worker `busaralabs-queue-consumer` is a separate deploy from Pages. | Names are in the served worker toml. Consumer deployment was not listed. | NOT VERIFIED | HTTP config file. | NOT VERIFIED |
+| R2 / storage | None. | No `r2_buckets` block in the candidate or in `a2bdcba`. | Nobody, if the dashboard matches. | Source. Dashboard NOT VERIFIED. | NOT APPLICABLE — NOT IMPLEMENTED in source |
+| Worker and service bindings | No service bindings. Durable object `RateLimiter` is declared on the queue worker only. | Source only. | NOT VERIFIED | `workers/wrangler.worker.toml` | NOT VERIFIED for the object. Service bindings NOT APPLICABLE — NOT IMPLEMENTED |
+| Secrets and env vars | Names only: `SENDGRID_API_KEY`, `NOTIFY_EMAIL`, `QUEUE_ENCRYPTION_KEY`, `TURNSTILE_SECRET_KEY`, `COLLECTION_ENABLED`, `COLLECTION_PRODUCTION_ACK`, `D1_DATABASE_ID`, `KV_NAMESPACE_ID`, `QUEUE_NAME`. | `COLLECTION_ENABLED` is not assigned in the live toml. Other names were not listed. `POSTMARK_API_TOKEN` is not read by the candidate. | NOT VERIFIED | Secret list API 403. No values read. | NOT VERIFIED |
+| API credentials | `STAGING_CLOUDFLARE_API_TOKEN` and `PRODUCTION_CLOUDFLARE_API_TOKEN` on the candidate. PR #3 still references `CLOUDFLARE_API_TOKEN`. | Existence NOT VERIFIED. | A push to `main` or `staging` can use them because environment reviewers are empty. | Workflow source. Environment object has no protection rules. | NOT VERIFIED, and the empty reviewer list is observed |
+| Email | SendGrid only after the candidate gate and resource guard. No Postmark call. | Live OPTIONS 204 does not send mail. A live POST was not sent. | NOT VERIFIED | Unit tests stub `fetch`. | NOT VERIFIED live |
+| Logs, monitoring, backups | Separate per environment, no production export on the site. | No backup product is declared. Logs were not opened. | NOT VERIFIED | Repo has no backup job. | NOT VERIFIED |
+| Deploy identities | GitHub environment `staging` deploys only `staging`. `production` deploys only `main`. | Both environments have `deployment_branch_policy: null` and `can_admins_bypass: true`. | Any actor who can push those branches, which is NOT VERIFIED while classic protection returns 403. | GitHub environment API, 2026-10-24. | FAIL as a control. Binding target NOT VERIFIED |
+
+Shared by design in Wrangler: preview and the `staging` branch use one D1, one KV, and one queue, because Pages exposes one preview environment. Restriction that exists only in the candidate: `functions/lib/resource-guard.js` refuses production ids on preview. That code is not live. The June handler on `a2bdcba` does not contain it.
+
+Operator procedure when a read token exists. Minimum permission is the G3 data-read token in `OPERATOR-CHECKLIST.md` (D1 Read, KV Read, Queues Read) plus Pages Read. No edit.
+
+- `npx wrangler d1 list` — expected names and ids as in the table, and no extra database shared with production. Safe evidence: name and id lines.
+- `npx wrangler kv namespace list` — expected the two ids. Do not list keys.
+- `npx wrangler queues list` — expected the four queue names. Safe evidence: names and message counts, never bodies.
+- Pages project `busaralabs-website` → Settings → Bindings, Production and Preview. Expected: preview bindings are the staging ids only. Safe evidence: binding name and resource name.
+
 ## Fail-closed behavior in the candidate
 
 `functions/lib/resource-guard.js` compares `ENVIRONMENT`, `CORS_ORIGIN`, and the three plain id vars.

@@ -1,5 +1,11 @@
 {
-  "note": "Apply only with a token that has administration. This review token received HTTP 403. Do not merge or deploy as part of applying these.",
+  "note": "Do not apply this file from the security review. On 2026-10-24, rulesets were an empty list. Classic protection GET on main and staging returned 403 with X-Accepted-Github-Permissions administration=read, so classic protection is NOT VERIFIED rather than proven absent. Environment protection_rules were empty and can_admins_bypass was true. Apply only with a separate Administration Write token after the owner confirms reviewer id 279621574 is CompBusaraLabs. CODEOWNERS is on the candidate branch and is not on main, so code-owner review does nothing for main until that file is on main. A green Validate run is not proof these rules exist.",
+  "recheck_2026_10_24": {
+    "applied": false,
+    "rulesets_observed": [],
+    "classic_branch_protection": "NOT VERIFIED",
+    "environments_protection_rules": 0
+  },
   "collaborator_seen": {
     "login": "CompBusaraLabs",
     "id": 279621574,
@@ -130,8 +136,8 @@
     "path": "/repos/BusaraITL/busaralabs-website/environments/staging",
     "body": {
       "wait_timer": 0,
-      "prevent_self_review": false,
-      "reviewers": [],
+      "prevent_self_review": true,
+      "reviewers": [{"type": "User", "id": 279621574}],
       "deployment_branch_policy": {
         "protected_branches": false,
         "custom_branch_policies": true

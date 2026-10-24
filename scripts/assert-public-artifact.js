@@ -87,11 +87,26 @@ function segment(rel) {
 function safeSegment(part) {
   if (!part || part === '.' || part === '..') return false;
   if (part.startsWith('.')) return false;
-  const lower = part.toLowerCase();
-  if (lower === 'wrangler.toml' || lower === 'handover.md' || lower === 'package.json' || lower === 'package-lock.json' || lower === 'build.js') {
+  const lower = normalizedSegment(part);
+  if (lower.startsWith('.')) return false;
+  if (lower === 'wrangler.toml' || lower === 'handover.md' || lower === 'package.json' || lower === 'package-lock.json' || lower === 'build.js' || lower === '_worker.js') {
     return false;
   }
   return true;
+}
+
+function normalizedSegment(part) {
+  let value = part;
+  for (let i = 0; i < 2; i += 1) {
+    try {
+      const next = decodeURIComponent(value);
+      if (next === value) break;
+      value = next;
+    } catch {
+      break;
+    }
+  }
+  return value.toLowerCase();
 }
 
 function looksLikeKeyMaterial(file) {

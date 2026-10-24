@@ -4,7 +4,8 @@ import { createRequire } from 'node:module';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
-import { onRequestGet, onRequestOptions, onRequestPost } from '../functions/api/contact.js';
+import { onRequestDelete, onRequestGet, onRequestOptions, onRequestPost, onRequestPut } from '../functions/api/contact.js';
+
 import { evaluateAbuseControls } from '../functions/lib/abuse-controls.js';
 import { ENABLED_VALUE } from '../functions/lib/collection-gate.js';
 import { RESOURCE_IDS } from '../functions/lib/resource-guard.js';
@@ -154,7 +155,7 @@ test('the public artifact guard is an allowlist', () => {
     fs.writeFileSync(path.join(dir, name), 'x');
     assert.throws(() => assertPublicArtifact(dir), /non-public/, name);
   }
-  for (const nested of ['workers/wrangler.toml', '.git/HEAD', 'node_modules/pkg/index.js', 'docs/security/GATES.md', 'scripts/build.js', 'assets/js/main.js.map']) {
+  for (const nested of ['workers/wrangler.toml', 'wrangler%2etoml', 'wrangler%252etoml', 'functions/_worker.js', '.git/HEAD', 'node_modules/pkg/index.js', 'docs/security/GATES.md', 'scripts/build.js', 'assets/js/main.js.map']) {
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'busara-public-'));
     fs.mkdirSync(path.join(dir, path.dirname(nested)), { recursive: true });
     fs.writeFileSync(path.join(dir, nested), 'x');
@@ -174,6 +175,45 @@ test('the built headers allow only self-hosted scripts and do not noindex produc
   assert.match(headers, /Permissions-Policy:/);
   const directives = headers.split('\n').filter((line) => /^\s+\S/.test(line) && !line.trim().startsWith('#'));
   assert.equal(directives.some((line) => line.includes('X-Robots-Tag')), false);
+});
+
+test('the candidate handler has no production fallback and does not name Postmark', () => {
+  const contact = fs.readFileSync(new URL('../functions/api/contact.js', import.meta.url), 'utf8');
+  const consumer = fs.readFileSync(new URL('../workers/queue-consumer.js', import.meta.url), 'utf8');
+  assert.equal(contact.includes("|| 'production'"), false);
+  assert.equal(contact.includes('|| "production"'), false);
+  assert.equal(/POSTMARK/i.test(contact), false);
+  assert.equal(/POSTMARK/i.test(consumer), false);
+  assert.equal(onRequestPut().status, 405);
+  assert.equal(onRequestDelete().status, 405);
+  assert.equal(onRequestGet().status, 405);
+});
+
+test('a disabled contact path does not call the network', async () => {
+  const original = globalThis.fetch;
+  let fetches = 0;
+  globalThis.fetch = async () => {
+    fetches += 1;
+    throw new Error('outbound');
+  };
+  try {
+    const request = new Request('https://staging.busaralabs.com/api/contact', {
+      method: 'POST',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      body: 'name=Ada',
+    });
+    const response = await onRequestPost({
+      request,
+      env: { DB: { prepare() { throw new Error('db'); } }, CONTACT_QUEUE: { send() { throw new Error('queue'); } } },
+    });
+    assert.equal(response.status, 403);
+    assert.equal(fetches, 0);
+    const options = await onRequestOptions({ request, env: {} });
+    assert.equal(options.status, 403);
+    assert.equal(fetches, 0);
+  } finally {
+    globalThis.fetch = original;
+  }
 });
 
 test('the workflow cannot fall back to a shared Cloudflare secret or a production URL', () => {
