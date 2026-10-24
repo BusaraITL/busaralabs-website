@@ -23,7 +23,8 @@
 #     production → busaralabs.com (main branch)
 #
 # SECRETS — set via Wrangler CLI (Pages syntax):
-#   npx wrangler pages secret put POSTMARK_API_TOKEN
+# POSTMARK_API_TOKEN is not read. Do not create it. If it exists, delete it.
+# Deleting this comment does not rotate a live token.
 #   npx wrangler pages secret put TURNSTILE_SECRET_KEY
 #   npx wrangler pages secret put QUEUE_ENCRYPTION_KEY
 #   npx wrangler pages secret put NOTIFY_EMAIL
@@ -31,7 +32,9 @@
 
 name                   = "busaralabs-website"
 compatibility_date     = "2024-01-01"
-pages_build_output_dir = "."
+# Upload only public/. scripts/publish-public.js builds that
+# directory from an allowlist. The repository root must not be served.
+pages_build_output_dir = "public"
 
 # ============================================================
 # PREVIEW ENVIRONMENT (staging branch → staging.busaralabs.com)

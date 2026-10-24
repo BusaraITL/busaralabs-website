@@ -57,6 +57,8 @@ esbuild.build({
   } else {
     console.log(`  Status:  Within 50KB target ✓`);
   }
+
+  require('./scripts/publish-public');
 })
 .catch((err) => {
   console.error('Build failed:', err.message);
