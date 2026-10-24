@@ -27,13 +27,15 @@
 'use strict';
 
 import { validatePayload, SUBMISSION_STATUS } from './payload-contract.js';
+import { evaluateCollectionGate } from '../functions/lib/collection-gate.js';
+import { evaluateResourceIsolation } from '../functions/lib/resource-guard.js';
 
 // ============================================================
 // CONSTANTS
 // ============================================================
 const SENDGRID_API_URL = 'https://api.sendgrid.com/v3/mail/send';
 const FROM_EMAIL       = 'hello@busaralabs.com';
-const FROM_NAME        = 'BIT Labs Website';
+const FROM_NAME        = 'Busara Labs Website';
 const MAX_RETRIES      = 3;
 
 // ============================================================
@@ -48,6 +50,26 @@ const MAX_RETRIES      = 3;
  * @param {object} ctx         — Execution context
  */
 export async function processContactQueue(batch, env, ctx) {
+  const gate = evaluateCollectionGate(env);
+  const isolation = evaluateResourceIsolation(env);
+  const messages = batch && Array.isArray(batch.messages) ? batch.messages : [];
+  let blockReason = '';
+  if (!gate.allowed) blockReason = gate.reason;
+  else if (!isolation.ok) blockReason = isolation.reason;
+  else if (!isolation.email) blockReason = 'email-disabled';
+
+  if (blockReason) {
+    for (const message of messages) {
+      if (message && typeof message.ack === 'function') message.ack();
+    }
+    console.log('[queue-consumer] Batch discarded without reading payloads.', {
+      count: messages.length,
+      reason: blockReason,
+      timestamp: new Date().toISOString(),
+    });
+    return { discarded: messages.length, reason: blockReason };
+  }
+
   const results = await Promise.allSettled(
     batch.messages.map(msg => processMessage(msg, env))
   );
@@ -134,6 +156,11 @@ async function processMessage(message, env) {
 // ============================================================
 
 async function sendNotificationEmail(payload, env) {
+  const isolation = evaluateResourceIsolation(env);
+  if (!isolation.email) {
+    throw new Error('Email delivery is disabled for this environment');
+  }
+
   const notifyEmail = env.NOTIFY_EMAIL;
 
   if (!notifyEmail) {
@@ -157,7 +184,7 @@ async function sendNotificationEmail(payload, env) {
       email: FROM_EMAIL,
       name:  FROM_NAME,
     },
-    subject: `[BIT Labs] New contact form submission #${payload.submissionId}`,
+    subject: `[Busara Labs] New contact form submission #${payload.submissionId}`,
     content: [
       {
         type:  'text/plain',

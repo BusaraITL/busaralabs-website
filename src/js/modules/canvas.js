@@ -6,7 +6,7 @@
    ============================================================
    Procedurally generated node network animation.
    Motif: precision infrastructure — interconnected nodes
-   representing the technology fabric BIT Labs is building.
+   representing the technology fabric Busara Labs is building.
 
    Performance:
    - requestAnimationFrame loop — never blocks main thread

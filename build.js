@@ -57,6 +57,8 @@ esbuild.build({
   } else {
     console.log(`  Status:  Within 50KB target ✓`);
   }
+
+  require('./scripts/assemble-site');
 })
 .catch((err) => {
   console.error('Build failed:', err.message);

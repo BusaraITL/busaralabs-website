@@ -1,0 +1,32 @@
+<section class="sheet" aria-labelledby="privacy-title">
+  <div class="wrap prose">
+    <p class="sheet-ref"><span>Legal</span><span>Privacy</span></p>
+    <h1 id="privacy-title">Privacy Policy</h1>
+    <p class="legal-meta">Busara Infrastructure &amp; Technology Labs Ltd · Nairobi, Kenya</p>
+    <p>This notice describes what this website does today. It is not a registration certificate, and it does not say that the Office of the Data Protection Commissioner has cleared Busara Labs.</p>
+
+    <h2>Who is responsible</h2>
+    <p>The organisation responsible for this website is Busara Infrastructure &amp; Technology Labs Ltd, Nairobi, Kenya. For a data-protection question, write to <a href="mailto:compliance@busaralabs.com">compliance@busaralabs.com</a>. For a general question, write to <a href="mailto:hello@busaralabs.com">hello@busaralabs.com</a>.</p>
+
+    <h2>What the website does now</h2>
+    <p>The pages are informational. There is no account, no waitlist, and no careers upload. Application intake is not enabled. The contact routes are mailto links: they open the email application on your device. A message you send that way is not collected by this website.</p>
+    <p>The contact page may show a form labelled as a demonstration. That form does not submit to Busara Labs. With JavaScript off it is not shown. Completing it does not mean a message was received.</p>
+
+    <h2>The collection switch</h2>
+    <p>The codebase contains submission endpoints. They are off. Each one checks a server-side switch before it reads a submission. The switch is the environment variable <code>COLLECTION_ENABLED</code>. If that variable is missing, empty, or any value other than the exact string documented in the environment notes, the endpoint refuses the request. It does not store the submission and it does not write the submission in its log. Production cannot be turned on by that variable alone. A second acknowledgement variable is required when the environment is production. Those variables are not set by this release.</p>
+
+    <h2>Categories this release does not collect through the site</h2>
+    <p>Through its own pages and scripts, this release does not collect a name, email address, message, CV, identity document, or waitlist entry. The scripts do not set cookies and do not use local or session storage. They do not load an analytics script.</p>
+
+    <h2>Hosting</h2>
+    <p>The site is hosted on Cloudflare. Delivering a page means the host can see connection data, including an IP address and a user agent, as part of serving the request. This notice does not state a retention period for those host logs. Busara Labs does not operate that log store and has not published a period for it.</p>
+
+    <h2>If collection were turned on later</h2>
+    <p>It is not on. Turning it on is a separate decision. It would require an approved notice, a decision on the Office of the Data Protection Commissioner position, and an explicit production acknowledgement. It is not authorised by publishing this page.</p>
+    <p>The endpoint code, if that later decision were made, is written to process a name, an email address, a message, a consent flag, an IP address, and a user agent; to store those in a database; and to send an email through SendGrid in the United States. Older configuration comments mention Postmark. The code that sends mail calls SendGrid, not Postmark. Neither is used for form data while the switch is off. No retention period is stated here, because none is in effect. A number that appears in configuration is not a published retention period.</p>
+
+    <h2>Consent and your requests</h2>
+    <p>While the forms are off, the site does not ask you to consent to collection of form data, because it does not collect that data. A mailto message is a message you choose to send from your own mail application.</p>
+    <p>To ask what data Busara Labs holds, or to ask for a correction, write to <a href="mailto:compliance@busaralabs.com">compliance@busaralabs.com</a>. This page does not claim that a particular response time or a particular statutory process has been approved.</p>
+  </div>
+</section>

@@ -11,7 +11,7 @@
    entry by appending an object here — the page renders from data.
      id           two-digit label
      stage        the methodology stage this entry records
-     status       'Completed' | 'In progress' | 'Upcoming'
+     status       'Recorded' — describes this entry only, never the phase or Paamoja
      theme        one line — what this entry is about
      date         soft phase label
      body[]       paragraphs, written as institutional record
@@ -24,7 +24,7 @@ window.BUSARA_JOURNAL = [
   {
     id: '01',
     stage: 'Issue Identification',
-    status: 'Completed',
+    status: 'Recorded',
     theme: 'Recognising a recurring problem before proposing a solution.',
     date: 'Phase one',
     body: [
@@ -46,14 +46,14 @@ window.BUSARA_JOURNAL = [
   {
     id: '02',
     stage: 'Discovery & Listening',
-    status: 'Completed',
+    status: 'Recorded',
     theme: 'Testing whether the observed problem was individual or collective.',
     date: 'Phase one',
     body: [
       'A personal observation is not yet evidence. The second stage set out to test whether the pattern noticed by one participant held more widely \u2014 and, deliberately, to look for the reasons it might not.',
       'In practice this meant speaking with traders, business owners and other participants across different parts of town, with the explicit aim of challenging the initial belief rather than confirming it. The question was not \u201Cdo others agree?\u201D but \u201Cwhere does this break down?\u201D',
       'It largely did not break down. The same themes returned across conversations: the same trust issues, the same payment challenges, the same dependence on personal recommendation, and the same hesitation to transact digitally with anyone outside an existing relationship.',
-      'That recurrence is what mattered. It moved the work from anecdote to evidence \u2014 from one person\u2019s experience to a problem a community recognised in common. From this point, Busara Labs was no longer responding to an impression but to a validated, shared reality.'
+      'That recurrence is what mattered. It moved the work from anecdote to evidence \u2014 from one person\u2019s experience to a problem a community recognised in common. From this point, Busara Labs was no longer responding to an impression but to a shared problem identified through early conversations, with formal validation pending.'
     ],
     observationsLabel: 'What recurred',
     observations: [
@@ -62,6 +62,6 @@ window.BUSARA_JOURNAL = [
       'Shared reliance on personal recommendation',
       'Common hesitation to transact digitally without a prior relationship'
     ],
-    outcome: 'An individual observation, validated as a collective problem \u2014 the basis for everything that follows.'
+    outcome: 'An individual observation, identified as a shared problem through early conversations; formal validation is pending \u2014 the basis for everything that follows.'
   }
 ];

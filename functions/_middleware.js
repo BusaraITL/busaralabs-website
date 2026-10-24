@@ -1,51 +1,78 @@
 /* ============================================================
    BUSARA INFRASTRUCTURE & TECHNOLOGY LABS LTD
-   functions/_middleware.js — per-request CSP with nonce
+   functions/_middleware.js — CSP, and noindex off production
    ------------------------------------------------------------
-   Cloudflare's bot-management / JavaScript Detections feature
-   injects an inline <script> on every page, with content that
-   changes per request (embeds a per-request token). A static
-   CSP in _headers cannot accommodate this: hash-pinning fails
-   immediately since the content is never the same twice, and
-   'unsafe-inline' would weaken script-src for the whole site.
+   CSP allows only this origin. Scripts are files under /assets.
+   There is no nonce and no unsafe-inline, so an injected inline
+   script does not run.
 
-   Cloudflare's own docs state the supported fix: include a
-   nonce in the CSP response header, and Cloudflare's edge will
-   automatically read it and stamp the same nonce onto the
-   scripts it injects. This middleware generates a fresh,
-   cryptographically random nonce on every request and sets the
-   CSP header dynamically. All other security headers remain in
-   _headers as static rules — this file's only job is CSP.
+   form-action 'none' blocks a form post while collection is off.
+   mailto links are anchors, not form actions.
 
-   This site ships zero inline <script> or <style> of its own
-   (verified — see commit history), so no nonce needs to be
-   threaded into our own HTML at all. Only the response header
-   carries it.
-
-   Version: 1.0 | June 2026 | Classification: Public
+   Indexing: production hostnames are busaralabs.com and
+   www.busaralabs.com. Every other host, including
+   staging.busaralabs.com and *.pages.dev, gets
+   X-Robots-Tag: noindex, nofollow and a disallow-all robots.txt.
+   This is not Cloudflare Access. It does not prove the project
+   bindings are isolated.
    ============================================================ */
 
-export async function onRequest(context) {
-  const response = await context.next();
+const PRODUCTION_HOSTS = new Set(['busaralabs.com', 'www.busaralabs.com']);
 
-  // 16 random bytes, base64-encoded — standard nonce size/format
-  const nonceBytes = new Uint8Array(16);
-  crypto.getRandomValues(nonceBytes);
-  const nonce = btoa(String.fromCharCode(...nonceBytes));
+function isProductionHost(hostname) {
+  return PRODUCTION_HOSTS.has(String(hostname || '').toLowerCase());
+}
 
-  const csp = [
+function contentSecurityPolicy() {
+  return [
     "default-src 'self'",
     "img-src 'self' data:",
     "style-src 'self'",
-    `script-src 'self' 'nonce-${nonce}' https://static.cloudflareinsights.com`,
+    "script-src 'self'",
     "font-src 'self'",
     "base-uri 'self'",
-    "form-action 'self'",
-    "connect-src 'self' https://cloudflareinsights.com",
-    "frame-ancestors 'none'"
+    "form-action 'none'",
+    "connect-src 'self'",
+    "object-src 'none'",
+    "frame-ancestors 'none'",
   ].join('; ');
+}
 
-  const newResponse = new Response(response.body, response);
-  newResponse.headers.set('Content-Security-Policy', csp);
-  return newResponse;
+const SECURITY_HEADERS = {
+  'Content-Security-Policy': contentSecurityPolicy(),
+  'Strict-Transport-Security': 'max-age=63072000; includeSubDomains; preload',
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'DENY',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+  'Permissions-Policy': 'geolocation=(), microphone=(), camera=(), payment=()',
+};
+
+export async function onRequest(context) {
+  const url = new URL(context.request.url);
+  const production = isProductionHost(url.hostname);
+
+  if (!production && url.pathname === '/robots.txt') {
+    return new Response('User-agent: *\nDisallow: /\n', {
+      status: 200,
+      headers: {
+        'Content-Type': 'text/plain; charset=utf-8',
+        'Cache-Control': 'no-store',
+        'X-Robots-Tag': 'noindex, nofollow',
+        ...SECURITY_HEADERS,
+      },
+    });
+  }
+
+  const response = await context.next();
+  const headers = new Headers(response.headers);
+  for (const [name, value] of Object.entries(SECURITY_HEADERS)) {
+    headers.set(name, value);
+  }
+  if (!production) headers.set('X-Robots-Tag', 'noindex, nofollow');
+
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
 }

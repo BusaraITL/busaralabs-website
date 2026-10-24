@@ -1,5 +1,7 @@
 # Busara Labs — busaralabs.com
 
+> **V2 staging candidate, 2026-10-22.** The website is assembled into `public/` by `node build.js`. Deploy that directory only. Do not deploy the repository root: it would publish this file and `wrangler.toml`. Collection is default-disabled. The June 2026 notes below describe the previous site and are not the V2 deploy guide. See `docs/environment.md` and `CONTENT-CHANGELOG.md`.
+
 ## Engineering Handover & Technical Documentation
 
 **Version:** RC‑1 (Release Candidate) · June 2026

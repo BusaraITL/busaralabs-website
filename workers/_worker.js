@@ -23,6 +23,7 @@
 
 import { processContactQueue } from './queue-consumer.js';
 import { RateLimiter }         from './rate-limiter.js';
+import { evaluateResourceIsolation } from '../functions/lib/resource-guard.js';
 
 // ============================================================
 // DURABLE OBJECT EXPORTS
@@ -78,6 +79,15 @@ export default {
 // ODPC Kenya DPA 2019 § 49 — data minimisation and retention.
 // ============================================================
 async function runRetentionCleanup(env) {
+  const isolation = evaluateResourceIsolation(env);
+  if (!isolation.destructive) {
+    console.log('[_worker] Retention cleanup refused:', {
+      reason: isolation.reason,
+      timestamp: new Date().toISOString(),
+    });
+    return { deleted: false, reason: isolation.reason };
+  }
+
   try {
     const result = await env.DB.prepare(`
       DELETE FROM contact_submissions
@@ -92,7 +102,7 @@ async function runRetentionCleanup(env) {
   } catch (err) {
     // Log failure — does not affect live traffic
     console.error('[_worker] Retention cleanup failed:', {
-      error:     err.message,
+      name: err && err.name ? err.name : 'Error',
       timestamp: new Date().toISOString(),
     });
   }

@@ -196,7 +196,7 @@ function validateConsentTimestamp(ts) {
 }
 
 function validateEnvironment(env) {
-  const VALID = ['development', 'staging', 'production'];
+  const VALID = ['development', 'preview', 'staging', 'production'];
   if (!VALID.includes(env)) {
     throw new ValidationError(
       `environment must be one of: ${VALID.join(', ')}`,

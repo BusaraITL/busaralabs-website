@@ -22,16 +22,23 @@
 #     preview    → staging.busaralabs.com (staging branch)
 #     production → busaralabs.com (main branch)
 #
-# SECRETS — set via Wrangler CLI (Pages syntax):
-#   npx wrangler pages secret put POSTMARK_API_TOKEN
-#   npx wrangler pages secret put TURNSTILE_SECRET_KEY
-#   npx wrangler pages secret put QUEUE_ENCRYPTION_KEY
-#   npx wrangler pages secret put NOTIFY_EMAIL
+# SECRETS — set via Wrangler CLI, per environment, never in this file.
+#   The queue consumer code sends mail through SendGrid (SENDGRID_API_KEY).
+#   Comments in older revisions of this file named Postmark. Postmark is
+#   not called by the code. Do not copy production secrets into preview.
+#
+# COLLECTION (default disabled — do not set these in the repository):
+#   COLLECTION_ENABLED=on          exact string, or every endpoint rejects
+#   COLLECTION_PRODUCTION_ACK=...  required as well when ENVIRONMENT=production
+#   See docs/environment.md. Neither variable is defined below.
 # ============================================================
 
 name                   = "busaralabs-website"
 compatibility_date     = "2024-01-01"
-pages_build_output_dir = "."
+# Deploy only the assembled public directory. The repository root
+# (HANDOVER.md, this file, workers/, src/) must not be uploaded.
+# See docs/environment.md.
+pages_build_output_dir = "public"
 
 # ============================================================
 # PREVIEW ENVIRONMENT (staging branch → staging.busaralabs.com)
@@ -41,6 +48,11 @@ pages_build_output_dir = "."
 [env.preview.vars]
 ENVIRONMENT          = "staging"
 CORS_ORIGIN          = "https://staging.busaralabs.com"
+# Plain identifiers so the Worker can fail closed. They must match
+# the binding ids below. They are not proof of the live binding.
+D1_DATABASE_ID       = "0bf0fbac-152e-4427-9f1a-47e4873d23db"
+KV_NAMESPACE_ID      = "9133b26c873640f7af02b15e8b9a54a8"
+QUEUE_NAME           = "contact-staging"
 RATE_LIMIT_IP_MAX    = "10"
 RATE_LIMIT_EMAIL_MAX = "5"
 RETENTION_DAYS       = "90"
@@ -66,6 +78,11 @@ queue   = "contact-staging"
 [env.production.vars]
 ENVIRONMENT          = "production"
 CORS_ORIGIN          = "https://busaralabs.com"
+# Plain identifiers so the Worker can fail closed. They must match
+# the binding ids below. They are not proof of the live binding.
+D1_DATABASE_ID       = "27a86a12-f597-4a23-9835-ee4f3e889185"
+KV_NAMESPACE_ID      = "e0f93da5591d40d3938b6c938e7c8d2a"
+QUEUE_NAME           = "contact-production"
 RATE_LIMIT_IP_MAX    = "5"
 RATE_LIMIT_EMAIL_MAX = "3"
 RETENTION_DAYS       = "90"
