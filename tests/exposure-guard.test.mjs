@@ -173,6 +173,62 @@ test('no alternate handler export accepts a submission while the gate is closed'
   assert.equal(moduleSource.includes('export async function onRequestPut'), false);
 });
 
+test('an enabled submission still fails closed when KV or Turnstile is unavailable', async () => {
+  const original = globalThis.fetch;
+  let fetches = 0;
+  globalThis.fetch = async () => {
+    fetches += 1;
+    throw new Error('outbound');
+  };
+  let inserts = 0;
+  const db = { prepare() { inserts += 1; throw new Error('db'); } };
+  const fields = {
+    name: 'Ada Lovelace',
+    email: 'ada@example.com',
+    message: 'Synthetic message for the closed-path test.',
+    consent: 'agreed',
+    'cf-turnstile-response': 'synthetic-token',
+  };
+  function request() {
+    return {
+      headers: { get(name) { return name === 'content-type' ? 'application/x-www-form-urlencoded' : ''; } },
+      formData() { return { get(name) { return fields[name] || ''; } }; },
+    };
+  }
+  try {
+    const limited = await onRequestPost({
+      request: request(),
+      env: {
+        COLLECTION_ENABLED: 'on',
+        ENVIRONMENT: 'staging',
+        RATE_LIMIT_KV: { get() { throw new Error('kv down'); }, put() { throw new Error('kv down'); } },
+        DB: db,
+        CONTACT_QUEUE: { send() { throw new Error('queue'); } },
+      },
+    });
+    assert.equal(limited.status, 429);
+    assert.equal(inserts, 0);
+    assert.equal(fetches, 0);
+    const unverified = await onRequestPost({
+      request: request(),
+      env: {
+        COLLECTION_ENABLED: 'on',
+        ENVIRONMENT: 'staging',
+        RATE_LIMIT_KV: { async get() { return null; }, async put() {} },
+        DB: db,
+        CONTACT_QUEUE: { send() { throw new Error('queue'); } },
+      },
+    });
+    assert.equal(unverified.status, 400);
+    assert.equal(inserts, 0);
+    assert.equal(fetches, 0);
+    const body = await unverified.json();
+    assert.equal(JSON.stringify(body).includes('ada@example.com'), false);
+  } finally {
+    globalThis.fetch = original;
+  }
+});
+
 test('package and workflow cannot upload the repository root or the first pages.dev URL', () => {
   const pkg = fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8');
   assert.equal(pkg.includes('pages deploy .'), false);

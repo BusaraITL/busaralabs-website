@@ -274,9 +274,8 @@ async function checkRateLimit(kv, key, limit, ttlSeconds) {
     const current = await kv.get(key);
     return current !== null && parseInt(current) >= limit;
   } catch {
-    // If KV is unavailable, fail open — don't block legitimate users
-    console.error('[contact] Rate limit KV read failed for key type:', key.split(':')[0]);
-    return false;
+    console.error('[contact] Rate limit KV read failed; refusing the request.');
+    return true;
   }
 }
 
@@ -295,9 +294,8 @@ async function incrementRateLimit(kv, key, ttlSeconds) {
 // ============================================================
 async function verifyTurnstile(token, ip, secretKey) {
   if (!secretKey) {
-    // Local dev — skip verification if no secret configured
-    console.warn('[contact] TURNSTILE_SECRET_KEY not set — skipping verification');
-    return true;
+    console.error('[contact] TURNSTILE_SECRET_KEY missing; verification refused.');
+    return false;
   }
 
   try {
