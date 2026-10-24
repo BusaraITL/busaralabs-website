@@ -27,6 +27,7 @@
 'use strict';
 
 import { validatePayload, SUBMISSION_STATUS } from './payload-contract.js';
+import { evaluateCollectionGate } from '../functions/lib/collection-gate.js';
 
 // ============================================================
 // CONSTANTS
@@ -48,6 +49,19 @@ const MAX_RETRIES      = 3;
  * @param {object} ctx         — Execution context
  */
 export async function processContactQueue(batch, env, ctx) {
+  const gate = evaluateCollectionGate(env);
+  if (!gate.allowed) {
+    const messages = batch && Array.isArray(batch.messages) ? batch.messages : [];
+    for (const message of messages) {
+      if (message && typeof message.ack === 'function') message.ack();
+    }
+    console.log('[queue-consumer] Collection disabled; batch discarded without reading payloads.', {
+      count: messages.length,
+      reason: gate.reason,
+    });
+    return { discarded: messages.length, reason: gate.reason };
+  }
+
   const results = await Promise.allSettled(
     batch.messages.map(msg => processMessage(msg, env))
   );

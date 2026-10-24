@@ -14,6 +14,9 @@ const OUT = path.join(ROOT, 'public');
 const ROOT_FILES = ['_headers', '_redirects', 'robots.txt', 'sitemap.xml', 'site.webmanifest'];
 
 function main() {
+  if (path.resolve(OUT) === path.resolve(ROOT)) {
+    throw new Error('Refusing to publish the repository root');
+  }
   fs.rmSync(OUT, { recursive: true, force: true });
   fs.mkdirSync(OUT, { recursive: true });
 
@@ -29,6 +32,16 @@ function main() {
   }
   fs.cpSync(path.join(ROOT, 'assets'), path.join(OUT, 'assets'), { recursive: true });
   fs.cpSync(path.join(ROOT, 'functions'), path.join(OUT, 'functions'), { recursive: true });
+
+  const forbidden = new Set([
+    'wrangler.toml', 'handover.md', 'package.json', 'package-lock.json', 'build.js',
+    'workers', 'node_modules', '.git', 'docs', 'scripts', 'src',
+  ]);
+  for (const name of fs.readdirSync(OUT)) {
+    if (forbidden.has(name.toLowerCase())) {
+      throw new Error('Publish copied a non-public path: ' + name);
+    }
+  }
 
   require('./assert-public-artifact').assertPublicArtifact(OUT);
   const html = fs.readdirSync(OUT).filter((name) => name.endsWith('.html'));

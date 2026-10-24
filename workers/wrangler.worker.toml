@@ -22,8 +22,7 @@
 #   Injected via CLOUDFLARE_ACCOUNT_ID environment variable.
 #
 # SECRETS — set via Wrangler CLI (Workers syntax):
-#   npx wrangler secret put POSTMARK_API_TOKEN   --env staging   --config workers/wrangler.worker.toml
-#   npx wrangler secret put POSTMARK_API_TOKEN   --env production --config workers/wrangler.worker.toml
+# POSTMARK_API_TOKEN is not read by the queue consumer. Do not create it.
 #   npx wrangler secret put QUEUE_ENCRYPTION_KEY --env staging   --config workers/wrangler.worker.toml
 #   npx wrangler secret put QUEUE_ENCRYPTION_KEY --env production --config workers/wrangler.worker.toml
 #   npx wrangler secret put NOTIFY_EMAIL         --env staging   --config workers/wrangler.worker.toml
@@ -85,9 +84,9 @@ name       = "RATE_LIMITER"
 class_name = "RateLimiter"
 
 # Secrets (set via wrangler secret put --env staging --config workers/wrangler.worker.toml):
-# POSTMARK_API_TOKEN
 # QUEUE_ENCRYPTION_KEY
 # NOTIFY_EMAIL
+# POSTMARK_API_TOKEN is not read. Do not set it.
 
 # ============================================================
 # ENVIRONMENT: PRODUCTION
@@ -119,6 +118,6 @@ name       = "RATE_LIMITER"
 class_name = "RateLimiter"
 
 # Secrets (set via wrangler secret put --env production --config workers/wrangler.worker.toml):
-# POSTMARK_API_TOKEN
 # QUEUE_ENCRYPTION_KEY
 # NOTIFY_EMAIL
+# POSTMARK_API_TOKEN is not read. Do not set it.

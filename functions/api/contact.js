@@ -38,7 +38,8 @@
 
 'use strict';
 
-import { buildPayload, FIELD_LIMITS, ValidationError } from '../../workers/payload-contract.js';
+import { buildPayload, FIELD_LIMITS } from '../../workers/payload-contract.js';
+import { evaluateCollectionGate, collectionDisabledBody } from '../lib/collection-gate.js';
 
 // ============================================================
 // TURNSTILE VERIFICATION ENDPOINT
@@ -49,8 +50,16 @@ const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/sit
 // MAIN HANDLER
 // Cloudflare Pages Functions export format.
 // ============================================================
+export function onRequestGet() {
+  return methodNotAllowed();
+}
+
 export async function onRequestPost(context) {
   const { request, env } = context;
+  const gate = evaluateCollectionGate(env);
+  if (!gate.allowed) {
+    return jsonResponse(collectionDisabledBody(), 403, { 'Cache-Control': 'no-store' });
+  }
 
   // Step 1: CORS headers (environment-aware)
   const corsHeaders = buildCorsHeaders(env);
@@ -169,7 +178,7 @@ export async function onRequestPost(context) {
       email,
       message,
       consentTs,
-      environment: env.ENVIRONMENT || 'production',
+      environment: env.ENVIRONMENT,
     });
 
     const encryptedPayload = await encryptPayload(payload, env.QUEUE_ENCRYPTION_KEY);
@@ -189,7 +198,7 @@ export async function onRequestPost(context) {
   } catch (err) {
     // Log internally — ID only, no personal data
     console.error('[contact] Unhandled error:', {
-      error:     err.message,
+      name: err && err.name ? err.name : 'Error',
       timestamp: new Date().toISOString(),
     });
 
@@ -206,6 +215,10 @@ export async function onRequestPost(context) {
 // ============================================================
 export async function onRequestOptions(context) {
   const { env } = context;
+  const gate = evaluateCollectionGate(env);
+  if (!gate.allowed) {
+    return jsonResponse(collectionDisabledBody(), 403, { 'Cache-Control': 'no-store' });
+  }
   return new Response(null, {
     status:  204,
     headers: buildCorsHeaders(env),
@@ -357,8 +370,22 @@ async function parseFormData(request) {
 // ============================================================
 // CORS HELPERS
 // ============================================================
+function methodNotAllowed() {
+  return jsonResponse({ success: false, error: 'Method not allowed.' }, 405, {
+    'Cache-Control': 'no-store',
+    Allow: 'POST, OPTIONS',
+  });
+}
+
 function buildCorsHeaders(env) {
-  const origin = env.CORS_ORIGIN || 'https://busaralabs.com';
+  const origin = typeof env.CORS_ORIGIN === 'string' ? env.CORS_ORIGIN : '';
+  if (!origin) {
+    return {
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'Cache-Control': 'no-store',
+    };
+  }
   return {
     'Access-Control-Allow-Origin':  origin,
     'Access-Control-Allow-Methods': 'POST, OPTIONS',

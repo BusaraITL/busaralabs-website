@@ -9,8 +9,9 @@
   },
   "scripts": {
     "build": "node build.js",
-    "dev": "wrangler pages dev . --port 3000",
-    "deploy": "npm run build && wrangler pages deploy .",
+    "dev": "wrangler pages dev public --port 3000",
+    "deploy": "npm run build && wrangler pages deploy public",
+    "test": "node --experimental-default-type=module --test tests/*.mjs",
     "lint:css": "stylelint 'assets/css/**/*.css'",
     "lint:js": "eslint 'assets/js/**/*.js'",
     "lint": "npm run lint:css && npm run lint:js"

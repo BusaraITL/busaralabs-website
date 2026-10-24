@@ -23,7 +23,8 @@
 #     production → busaralabs.com (main branch)
 #
 # SECRETS — set via Wrangler CLI (Pages syntax):
-#   npx wrangler pages secret put POSTMARK_API_TOKEN
+# POSTMARK_API_TOKEN is not read. Do not create it. If it exists, delete it.
+# Deleting this comment does not rotate a live token.
 #   npx wrangler pages secret put TURNSTILE_SECRET_KEY
 #   npx wrangler pages secret put QUEUE_ENCRYPTION_KEY
 #   npx wrangler pages secret put NOTIFY_EMAIL
